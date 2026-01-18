@@ -54,10 +54,10 @@
 
         @keyframes floating {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(12%, 18%) scale(1.15); }
+            100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Floating Hearts (ละอองหัวใจ) --- */
+        /* --- Tiny White Hearts (ละอองหัวใจสีขาวจิ๋ว) --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -68,17 +68,17 @@
 
         .heart {
             position: absolute;
-            color: rgba(255, 255, 255, 0.5); /* หัวใจขาวโปร่งแสง */
+            color: rgba(255, 255, 255, 0.6); /* สีขาวโปร่งแสง */
             user-select: none;
             pointer-events: none;
             animation: heartFloat linear infinite;
-            font-size: 10px; /* ขนาดเริ่มต้น */
+            line-height: 1;
         }
 
         @keyframes heartFloat {
             0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.7; }
-            80% { opacity: 0.7; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
@@ -92,7 +92,7 @@
             display: none;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
             flex-direction: column;
             align-items: center;
             background: var(--glass-card);
@@ -108,17 +108,17 @@
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
         h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        h2 { font-size: 1.35rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; transition: opacity 0.5s; }
 
         .progress-wrap {
-            width: 100%; height: 8px; background: rgba(0,0,0,0.05);
+            width: 100%; height: 6px; background: rgba(0,0,0,0.05);
             border-radius: 10px; margin-bottom: 25px; overflow: hidden;
         }
 
         #progress {
             width: 0%; height: 100%;
             background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999);
-            transition: width 0.7s ease;
+            transition: width 0.8s ease;
         }
 
         textarea {
@@ -142,7 +142,7 @@
 
         button:hover { transform: scale(1.05); background: #35313d; }
 
-        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.9rem; }
+        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.8rem; }
         
         iframe { border-radius: 25px; margin-top: 15px; border: 1px solid #eee; }
     </style>
@@ -170,7 +170,7 @@
             <textarea id="answer-input" placeholder="พิมพ์สิ่งที่อยู่ในใจคุณ..."></textarea>
             <div style="display: flex; gap: 15px;">
                 <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
-                <button onclick="nextQuestion()">ไปต่อ</button>
+                <button onclick="nextQuestion()">ข้อถัดไป</button>
             </div>
         </section>
 
@@ -182,38 +182,36 @@
         </section>
 
         <section id="screen-thanks" class="screen">
-            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ 💖</h2>
+            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ 🤍</h2>
             <button onclick="location.reload()">กลับหน้าแรก</button>
         </section>
     </div>
 
     <script>
-        // --- ส่วนสำหรับสร้างละอองหัวใจ (Floating Hearts) ---
+        // --- ระบบสร้างละอองหัวใจสีขาวจิ๋ว ---
         const heartContainer = document.getElementById('heart-container');
-        const heartCount = 25; // จำนวนหัวใจ
+        const heartCount = 40; // เพิ่มจำนวนเล็กน้อยเพราะขนาดจิ๋วลง
 
         function createHeart() {
             const heart = document.createElement('div');
             heart.className = 'heart';
-            heart.innerHTML = '❤'; // ใช้สัญลักษณ์หัวใจ
+            heart.innerHTML = '❤'; 
             
-            // สุ่มขนาด
-            const size = Math.random() * 12 + 8 + 'px';
+            // ขนาดจิ๋ว (ประมาณละอองเล็กๆ)
+            const size = Math.random() * 6 + 6 + 'px'; 
             heart.style.fontSize = size;
 
-            // สุ่มตำแหน่งเริ่มต้นตามแนวนอน
+            // สุ่มตำแหน่งแนวนอน
             heart.style.left = Math.random() * 100 + 'vw';
 
-            // สุ่มความเร็ว (ช้าๆ)
-            const duration = Math.random() * 10 + 15 + 's'; // 15-25 วินาที
+            // ความเร็วที่ช้าและสุ่มเพื่อให้ดูเป็นธรรมชาติ
+            const duration = Math.random() * 15 + 15 + 's'; 
             heart.style.animationDuration = duration;
-
-            // สุ่มดีเลย์
             heart.style.animationDelay = Math.random() * 10 + 's';
 
             heartContainer.appendChild(heart);
 
-            // ลบหัวใจออกเมื่อจบอนิเมชั่นแล้วสร้างใหม่เพื่อให้ลูปไปเรื่อยๆ
+            // วนลูปสร้างใหม่
             setTimeout(() => {
                 heart.remove();
                 createHeart();
@@ -224,6 +222,7 @@
             createHeart();
         }
 
+        // คำถาม 32 ข้อ
         const questions = [
             { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
             { q: "ถ้าความรู้สึกตอนนี้พูดได้ มันอยากบอกอะไรคุณ" },
@@ -281,7 +280,7 @@
             setTimeout(() => {
                 qText.innerText = q.q;
                 qText.style.opacity = 1;
-            }, 300);
+            }, 400);
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
