@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
+        /* --- Ambient Blobs --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -57,28 +57,29 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Tiny Dust Particles (ละอองเล็กจิ๋วสีขาว) --- */
+        /* --- แก้ไข Dust Particles ให้ชัดขึ้น --- */
         .particle-container {
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: 0;
+            z-index: 1; /* ปรับ z-index ให้สูงขึ้นเล็กน้อย */
             overflow: hidden;
+            pointer-events: none;
         }
 
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.5); /* สีขาวโปร่งแสง */
+            background: rgba(255, 255, 255, 0.9); /* เพิ่มความเข้มจาก 0.5 เป็น 0.9 */
             border-radius: 50%;
-            pointer-events: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* เพิ่มแสงเรืองเพื่อให้เห็นชัดขึ้น */
             animation: dustFloat linear infinite;
         }
 
         @keyframes dustFloat {
-            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+            0% { transform: translateY(105vh) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
         }
 
         #app {
@@ -107,7 +108,25 @@
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
         h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        h2 { font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; transition: opacity 0.5s; }
+        
+        /* --- อนิเมชั่นคำถามเลื่อนจากล่างขึ้นบน --- */
+        h2 { 
+            font-size: 1.3rem; 
+            font-weight: 300; 
+            line-height: 1.6; 
+            margin-bottom: 1.5rem; 
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* ลื่นไหลขึ้น */
+        }
+
+        .question-hide {
+            opacity: 0;
+            transform: translateY(20px); /* ลงไปข้างล่าง */
+        }
+
+        .question-show {
+            opacity: 1;
+            transform: translateY(0); /* กลับมาที่เดิม */
+        }
 
         .progress-wrap {
             width: 100%; height: 6px; background: rgba(0,0,0,0.05);
@@ -165,7 +184,7 @@
 
         <section id="screen-quiz" class="screen">
             <div class="progress-wrap"><div id="progress"></div></div>
-            <h2 id="question-text">...</h2>
+            <h2 id="question-text" class="question-show">...</h2>
             <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
             <div style="display: flex; gap: 15px;">
                 <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
@@ -187,26 +206,24 @@
     </div>
 
     <script>
-        // --- ส่วนสำหรับสร้างละอองจิ๋ว (Dust Particles) ---
+        // --- ปรับปรุง Dust Particles ให้ชัดขึ้น ---
         const dustContainer = document.getElementById('dust-container');
-        const dustCount = 45; // เพิ่มจำนวนเพื่อให้ดูหนาแน่นแต่บางเบา
+        const dustCount = 40; 
 
         for (let i = 0; i < dustCount; i++) {
             const dust = document.createElement('div');
             dust.className = 'particle';
             
-            // ขนาดเล็กมากๆ (1-3px)
-            const size = Math.random() * 2 + 1 + 'px'; 
+            // ขนาดใหญ่ขึ้นเล็กน้อย (2-4px)
+            const size = Math.random() * 2 + 2 + 'px'; 
             dust.style.width = size;
             dust.style.height = size;
 
-            // สุ่มตำแหน่งเริ่มต้น
             dust.style.left = Math.random() * 100 + 'vw';
             dust.style.top = Math.random() * 100 + 'vh';
 
-            // สุ่มความเร็ว (ลอยช้าเป็นพิเศษ 20-35 วินาที)
-            dust.style.animationDuration = Math.random() * 15 + 20 + 's'; 
-            dust.style.animationDelay = Math.random() * 10 + 's';
+            dust.style.animationDuration = Math.random() * 10 + 15 + 's'; 
+            dust.style.animationDelay = Math.random() * 5 + 's';
 
             dustContainer.appendChild(dust);
         }
@@ -264,11 +281,18 @@
         function showQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
-            qText.style.opacity = 0;
+            
+            // ซ่อนคำถามเดิม (เลื่อนลง)
+            qText.classList.remove('question-show');
+            qText.classList.add('question-hide');
+
             setTimeout(() => {
                 qText.innerText = q.q;
-                qText.style.opacity = 1;
-            }, 400);
+                // แสดงคำถามใหม่ (สไลด์ขึ้น)
+                qText.classList.remove('question-hide');
+                qText.classList.add('question-show');
+            }, 500);
+
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
