@@ -8,13 +8,13 @@
     
     <style>
         :root {
-            /* โทนสีพาสเทลตามคอนเซปต์ */
-            --pastel-pink: #ffdce5;
-            --pastel-yellow: #fff4d1;
-            --pastel-green: #e2f4e5;
-            --bg-base: #fdfaf5; /* สีครีมอุ่นๆ ช่วยคุมโทนไม่ให้สว่างจ้าเกินไป */
-            --text-dark: #5d576b; /* สีตัวอักษรโทนม่วงหม่นเพื่อให้ดูละมุนกว่าสีดำ */
-            --glass-white: rgba(255, 255, 255, 0.4);
+            /* ปรับสีพาสเทลให้เข้มขึ้น (Saturated Pastel) */
+            --warm-pink: #ffb1c1;
+            --warm-yellow: #ffe08a;
+            --warm-green: #a7d7b5;
+            --bg-creme: #fdf5e6; /* สีครีมเข้มขึ้นให้ฟีลกระดาษเก่าที่อบอุ่น */
+            --text-main: #4a4453; /* สีตัวอักษรเข้มขึ้นเพื่อให้อ่านง่าย */
+            --glass-card: rgba(255, 255, 255, 0.65);
         }
 
         * { box-sizing: border-box; }
@@ -22,8 +22,8 @@
         body {
             margin: 0;
             font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-dark);
+            background-color: var(--bg-creme);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,51 +33,52 @@
             position: relative;
         }
 
-        /* --- แผงสีพาสเทลที่ลอยไปมาด้านหลัง --- */
-        .blob-container {
+        /* --- ปรับแต่งก้อนสีให้เข้มขึ้นและเคลื่อนไหวแบบ Organic --- */
+        .ambient-bg {
             position: absolute;
             width: 100%;
             height: 100%;
             z-index: -1;
-            filter: blur(60px);
-            opacity: 0.7;
+            filter: blur(50px);
+            opacity: 0.8;
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            animation: moveBlob 25s infinite alternate ease-in-out;
+            animation: floating 20s infinite alternate ease-in-out;
         }
 
-        .pink { background: var(--pastel-pink); width: 50vw; height: 50vw; top: -10%; left: -10%; }
-        .yellow { background: var(--pastel-yellow); width: 60vw; height: 60vw; bottom: -15%; right: -10%; animation-delay: -5s; }
-        .green { background: var(--pastel-green); width: 45vw; height: 45vw; top: 20%; left: 25%; animation-delay: -10s; }
+        .pink { background: var(--warm-pink); width: 60vw; height: 60vw; top: -10%; left: -5%; }
+        .yellow { background: var(--warm-yellow); width: 70vw; height: 70vw; bottom: -15%; right: -5%; animation-delay: -4s; }
+        .green { background: var(--warm-green); width: 50vw; height: 50vw; top: 25%; left: 20%; animation-delay: -8s; }
 
-        @keyframes moveBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(15%, 10%) scale(1.1); }
+        @keyframes floating {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            100% { transform: translate(10%, 15%) rotate(15deg) scale(1.1); }
         }
 
         #app {
-            width: 100%;
+            width: 90%;
             max-width: 500px;
-            padding: 20px;
             z-index: 10;
         }
 
         .screen {
             display: none;
             opacity: 0;
-            transition: all 0.8s ease;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             flex-direction: column;
             align-items: center;
-            background: var(--glass-white);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 50px; /* มนแบบนุ่มนวลมาก */
-            padding: 40px 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            background: var(--glass-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid white;
+            border-radius: 45px;
+            padding: 40px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
         }
 
         .screen.active { 
@@ -86,59 +87,52 @@
             transform: translateY(0);
         }
 
-        /* อนิเมชั่นคำถามแบบค่อยๆ ปรากฏ */
-        .fade-in-up {
-            animation: fadeInUp 1s ease forwards;
-        }
+        h1 { font-size: 1.7rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
+        h2 { font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; color: var(--text-main); }
+        p { font-weight: 300; line-height: 1.6; color: #6b6378; }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 { font-size: 1.5rem; font-weight: 300; letter-spacing: 2px; color: var(--text-dark); margin-bottom: 1.5rem; opacity: 0.8; }
-        h2 { font-size: 1.2rem; font-weight: 300; line-height: 1.7; margin-bottom: 2rem; min-height: 4em; }
-
-        .progress-container {
-            width: 100%; height: 6px; background: rgba(255, 255, 255, 0.5);
-            border-radius: 10px; margin-bottom: 30px; overflow: hidden;
+        /* แถบ Progress ที่เข้มขึ้น */
+        .progress-wrap {
+            width: 100%; height: 8px; background: rgba(0,0,0,0.05);
+            border-radius: 10px; margin-bottom: 25px; overflow: hidden;
         }
 
         #progress {
             width: 0%; height: 100%;
-            background: linear-gradient(90deg, #ffc2d1, #ffe599, #c3e6cb);
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999);
+            transition: width 0.7s ease;
         }
 
         textarea {
-            width: 100%; height: 120px;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1.5px solid rgba(255, 255, 255, 0.8);
-            border-radius: 30px; color: var(--text-dark); padding: 20px;
-            font-family: 'Kanit', sans-serif; font-size: 1rem;
+            width: 100%; height: 140px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            border-radius: 25px; color: var(--text-main); padding: 20px;
+            font-family: 'Kanit', sans-serif; font-size: 1.1rem;
             resize: none; outline: none; text-align: center;
             margin-bottom: 25px; transition: 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
         }
 
-        textarea:focus { background: white; border-color: var(--pastel-pink); }
+        textarea:focus { border-color: var(--warm-pink); background: white; }
 
         button {
-            background: white; color: var(--text-dark); border: none;
-            padding: 12px 40px; border-radius: 30px; cursor: pointer;
-            font-size: 0.95rem; font-family: 'Kanit', sans-serif;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: #4a4453; color: white; border: none;
+            padding: 14px 40px; border-radius: 30px; cursor: pointer;
+            font-size: 1rem; font-family: 'Kanit', sans-serif;
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        button:hover { transform: scale(1.03); background: var(--pastel-yellow); }
+        button:hover { transform: scale(1.05); background: #35313d; }
 
-        .btn-skip { background: transparent; color: #9a8c98; font-size: 0.8rem; box-shadow: none; text-decoration: underline; }
+        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.9rem; }
 
-        iframe { border-radius: 30px; margin-top: 15px; border: 2px solid white; }
+        iframe { border-radius: 25px; margin-top: 15px; border: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-    <div class="blob-container">
+    <div class="ambient-bg">
         <div class="blob pink"></div>
         <div class="blob yellow"></div>
         <div class="blob green"></div>
@@ -146,35 +140,36 @@
 
     <div id="app">
         <section id="screen-start" class="screen active">
-            <h1 class="fade-in-up">The Truth I Can't Say</h1>
-            <p class="fade-in-up" style="font-weight: 200;">ขอต้อนรับสู่พื้นที่แห่งความอ่อนโยน<br>ให้เวลาได้เยียวยาใจผ่านถ้อยคำของคุณเอง</p>
-            <button onclick="nextScreen('screen-quiz')">เริ่มบันทึกความรู้สึก</button>
+            <h1>The Truth I Can't Say</h1>
+            <p>ค่อยๆ วางเรื่องราวที่หนักอึ้งไว้ชั่วคราว<br>แล้วลองคุยกับตัวเองในพื้นที่นี้ดูนะ</p>
+            <button onclick="nextScreen('screen-quiz')">เริ่มสำรวจใจตัวเอง</button>
         </section>
 
         <section id="screen-quiz" class="screen">
-            <div class="progress-container"><div id="progress"></div></div>
-            <h2 id="question-text" class="fade-in-up">...</h2>
-            <textarea id="answer-input" placeholder="เขียนสิ่งที่อยู่ในใจคุณ..."></textarea>
-            <div style="display: flex; gap: 15px; align-items: center;">
+            <div class="progress-wrap"><div id="progress"></div></div>
+            <h2 id="question-text">...</h2>
+            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
+            <div style="display: flex; gap: 15px;">
                 <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
-                <button onclick="nextQuestion()">ถัดไป</button>
+                <button onclick="nextQuestion()">ข้อถัดไป</button>
             </div>
         </section>
 
         <section id="screen-end" class="screen">
-            <h2>ขอบคุณที่คุณเป็นตัวเอง</h2>
-            <p style="font-size: 0.85rem; font-weight: 200;">ส่งความรู้สึกถึงเราได้ตรงนี้</p>
-            <iframe src="ใส่https://forms.gle/9fysEnT76Vnacu497" width="100%" height="320" frameborder="0">กำลังโหลด…</iframe>
+            <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
+            <p style="font-size: 0.9rem;">คุณเก่งมากที่ผ่านวันนี้มาได้</p>
+            <iframe src="https://forms.gle/9fysEnT76Vnacu497" width="100%" height="320" frameborder="0">กำลังโหลด…</iframe>
             <button onclick="nextScreen('screen-thanks')" style="margin-top: 20px;">จบบันทึก</button>
         </section>
 
         <section id="screen-thanks" class="screen">
-            <h2>ขอให้วันนี้ใจดีกับคุณนะ</h2>
+            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ</h2>
             <button onclick="location.reload()">กลับหน้าแรก</button>
         </section>
     </div>
 
     <script>
+        // ใช้คำถาม 32 ข้อเดิมของคุณ
         const questions = [
             { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
             { q: "ถ้าความรู้สึกตอนนี้พูดได้ มันอยากบอกอะไรคุณ" },
@@ -215,7 +210,7 @@
         function nextScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
             currentActive.style.opacity = 0;
-            currentActive.style.transform = "translateY(-10px)";
+            currentActive.style.transform = "translateY(-20px)";
             
             setTimeout(() => {
                 currentActive.classList.remove('active');
@@ -228,10 +223,18 @@
         function showQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
-            qText.classList.remove('fade-in-up');
-            void qText.offsetWidth; 
-            qText.classList.add('fade-in-up');
-            qText.innerText = q.q;
+            
+            // อนิเมชั่นคำถามแบบนุ่มนวล
+            qText.style.opacity = 0;
+            qText.style.transform = "scale(0.95)";
+            
+            setTimeout(() => {
+                qText.innerText = q.q;
+                qText.style.opacity = 1;
+                qText.style.transform = "scale(1)";
+                qText.style.transition = "all 0.5s ease";
+            }, 300);
+
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
