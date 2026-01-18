@@ -13,7 +13,7 @@
             --warm-green: #a7d7b5;
             --bg-creme: #fdf5e6; 
             --text-main: #4a4453; 
-            --glass-card: rgba(255, 255, 255, 0.65);
+            --glass-card: rgba(255, 255, 255, 0.7);
         }
 
         * { box-sizing: border-box; }
@@ -32,52 +32,54 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
+        /* --- Ambient Blobs (ก้อนสีหลัก) --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
             height: 100%;
             z-index: -1;
-            filter: blur(50px);
+            filter: blur(60px);
             opacity: 0.8;
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            animation: floating 20s infinite alternate ease-in-out;
+            animation: floating 25s infinite alternate ease-in-out;
         }
 
-        .pink { background: var(--warm-pink); width: 60vw; height: 60vw; top: -10%; left: -5%; }
-        .yellow { background: var(--warm-yellow); width: 70vw; height: 70vw; bottom: -15%; right: -5%; animation-delay: -4s; }
-        .green { background: var(--warm-green); width: 50vw; height: 50vw; top: 25%; left: 20%; animation-delay: -8s; }
+        .pink { background: var(--warm-pink); width: 65vw; height: 65vw; top: -15%; left: -10%; }
+        .yellow { background: var(--warm-yellow); width: 75vw; height: 75vw; bottom: -20%; right: -10%; animation-delay: -5s; }
+        .green { background: var(--warm-green); width: 55vw; height: 55vw; top: 20%; left: 30%; animation-delay: -10s; }
 
         @keyframes floating {
-            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-            100% { transform: translate(10%, 15%) rotate(15deg) scale(1.1); }
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(12%, 18%) scale(1.15); }
         }
 
-        /* --- Floating Particles (ละอองลอยใหม่) --- */
+        /* --- Floating Hearts (ละอองหัวใจ) --- */
         .particle-container {
             position: absolute;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* ทำให้ละอองหายไปเมื่อออกนอกจอ */
-            z-index: 0; /* อยู่ด้านล่างการ์ด แต่เหนือ blob */
+            z-index: 0;
+            overflow: hidden;
         }
 
-        .particle {
+        .heart {
             position: absolute;
-            background: rgba(255, 255, 255, 0.6); /* สีขาวขุ่นๆ */
-            border-radius: 50%;
-            pointer-events: none; /* ทำให้คลิกผ่านได้ */
-            animation: particleFloat linear infinite;
+            color: rgba(255, 255, 255, 0.5); /* หัวใจขาวโปร่งแสง */
+            user-select: none;
+            pointer-events: none;
+            animation: heartFloat linear infinite;
+            font-size: 10px; /* ขนาดเริ่มต้น */
         }
 
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        @keyframes heartFloat {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         #app {
@@ -99,19 +101,14 @@
             border: 2px solid white;
             border-radius: 45px;
             padding: 40px 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             text-align: center;
         }
 
-        .screen.active { 
-            display: flex; 
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
-        h1 { font-size: 1.7rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        h2 { font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; color: var(--text-main); }
-        p { font-weight: 300; line-height: 1.6; color: #6b6378; }
+        h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
+        h2 { font-size: 1.35rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; }
 
         .progress-wrap {
             width: 100%; height: 8px; background: rgba(0,0,0,0.05);
@@ -132,22 +129,21 @@
             font-family: 'Kanit', sans-serif; font-size: 1.1rem;
             resize: none; outline: none; text-align: center;
             margin-bottom: 25px; transition: 0.3s;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
         }
 
         textarea:focus { border-color: var(--warm-pink); background: white; }
 
         button {
             background: #4a4453; color: white; border: none;
-            padding: 14px 40px; border-radius: 30px; cursor: pointer;
+            padding: 14px 45px; border-radius: 30px; cursor: pointer;
             font-size: 1rem; font-family: 'Kanit', sans-serif;
-            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         button:hover { transform: scale(1.05); background: #35313d; }
 
         .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.9rem; }
-
+        
         iframe { border-radius: 25px; margin-top: 15px; border: 1px solid #eee; }
     </style>
 </head>
@@ -159,64 +155,75 @@
         <div class="blob green"></div>
     </div>
 
-    <div class="particle-container" id="particle-container"></div>
+    <div class="particle-container" id="heart-container"></div>
 
     <div id="app">
         <section id="screen-start" class="screen active">
             <h1>The Truth I Can't Say</h1>
-            <p>ค่อยๆ วางเรื่องราวที่หนักอึ้งไว้ชั่วคราว<br>แล้วลองคุยกับตัวเองในพื้นที่นี้ดูนะ</p>
-            <button onclick="nextScreen('screen-quiz')">เริ่มสำรวจใจตัวเอง</button>
+            <p>โอบกอดความรู้สึกของคุณด้วยความอ่อนโยน<br>ในพื้นที่ส่วนตัวแห่งนี้</p>
+            <button onclick="nextScreen('screen-quiz')">เริ่มบันทึกความรู้สึก</button>
         </section>
 
         <section id="screen-quiz" class="screen">
             <div class="progress-wrap"><div id="progress"></div></div>
             <h2 id="question-text">...</h2>
-            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
+            <textarea id="answer-input" placeholder="พิมพ์สิ่งที่อยู่ในใจคุณ..."></textarea>
             <div style="display: flex; gap: 15px;">
                 <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
-                <button onclick="nextQuestion()">ข้อถัดไป</button>
+                <button onclick="nextQuestion()">ไปต่อ</button>
             </div>
         </section>
 
         <section id="screen-end" class="screen">
-            <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
-            <p style="font-size: 0.9rem;">คุณเก่งมากที่ผ่านวันนี้มาได้</p>
+            <h2>ขอบคุณที่แบ่งปันความจริง</h2>
+            <p style="font-size: 0.9rem;">ความรู้สึกของคุณมีความหมายเสมอ</p>
             <iframe src="https://forms.gle/9fysEnT76Vnacu497" width="100%" height="320" frameborder="0">กำลังโหลด…</iframe>
             <button onclick="nextScreen('screen-thanks')" style="margin-top: 20px;">จบบันทึก</button>
         </section>
 
         <section id="screen-thanks" class="screen">
-            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ</h2>
+            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ 💖</h2>
             <button onclick="location.reload()">กลับหน้าแรก</button>
         </section>
     </div>
 
     <script>
-        // --- ส่วนสำหรับสร้างละอองลอย (Particles) ---
-        const particleContainer = document.getElementById('particle-container');
-        const numParticles = 30; // จำนวนละอองที่ต้องการ
+        // --- ส่วนสำหรับสร้างละอองหัวใจ (Floating Hearts) ---
+        const heartContainer = document.getElementById('heart-container');
+        const heartCount = 25; // จำนวนหัวใจ
 
-        for (let i = 0; i < numParticles; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤'; // ใช้สัญลักษณ์หัวใจ
             
             // สุ่มขนาด
-            const size = Math.random() * 4 + 1 + 'px'; // ขนาด 1-5px
-            particle.style.width = size;
-            particle.style.height = size;
+            const size = Math.random() * 12 + 8 + 'px';
+            heart.style.fontSize = size;
 
-            // สุ่มตำแหน่งเริ่มต้น
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.top = Math.random() * 100 + 'vh'; // เริ่มต้นจากทุกตำแหน่งในจอ
+            // สุ่มตำแหน่งเริ่มต้นตามแนวนอน
+            heart.style.left = Math.random() * 100 + 'vw';
 
-            // สุ่มความเร็วและดีเลย์
-            particle.style.animationDuration = Math.random() * 15 + 10 + 's'; // ระยะเวลา 10-25 วินาที
-            particle.style.animationDelay = Math.random() * 10 + 's'; // ดีเลย์ 0-10 วินาที
+            // สุ่มความเร็ว (ช้าๆ)
+            const duration = Math.random() * 10 + 15 + 's'; // 15-25 วินาที
+            heart.style.animationDuration = duration;
 
-            particleContainer.appendChild(particle);
+            // สุ่มดีเลย์
+            heart.style.animationDelay = Math.random() * 10 + 's';
+
+            heartContainer.appendChild(heart);
+
+            // ลบหัวใจออกเมื่อจบอนิเมชั่นแล้วสร้างใหม่เพื่อให้ลูปไปเรื่อยๆ
+            setTimeout(() => {
+                heart.remove();
+                createHeart();
+            }, (parseFloat(duration) + 10) * 1000);
         }
 
-        // ใช้คำถาม 32 ข้อเดิมของคุณ
+        for (let i = 0; i < heartCount; i++) {
+            createHeart();
+        }
+
         const questions = [
             { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
             { q: "ถ้าความรู้สึกตอนนี้พูดได้ มันอยากบอกอะไรคุณ" },
@@ -270,17 +277,11 @@
         function showQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
-            
             qText.style.opacity = 0;
-            qText.style.transform = "scale(0.95)";
-            
             setTimeout(() => {
                 qText.innerText = q.q;
                 qText.style.opacity = 1;
-                qText.style.transform = "scale(1)";
-                qText.style.transition = "all 0.5s ease";
             }, 300);
-
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
