@@ -277,7 +277,7 @@
                 const next = document.getElementById(screenId);
                 next.classList.add('active');
                 if(screenId === 'screen-quiz') showQuestion();
-            }, 1200);
+            }, 800);
         }
 
         function showQuestion() {
@@ -293,7 +293,7 @@
                 // สไลด์คำถามใหม่จากล่างขึ้นบน
                 qText.classList.remove('question-hide');
                 qText.classList.add('question-show');
-            }, 800);
+            }, 1200);
 
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
