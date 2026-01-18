@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs (ก้อนสีหลัก) --- */
+        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -57,7 +57,7 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Tiny White Hearts (ละอองหัวใจสีขาวจิ๋ว) --- */
+        /* --- Tiny Dust Particles (ละอองเล็กจิ๋วสีขาว) --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -66,20 +66,19 @@
             overflow: hidden;
         }
 
-        .heart {
+        .particle {
             position: absolute;
-            color: rgba(255, 255, 255, 0.6); /* สีขาวโปร่งแสง */
-            user-select: none;
+            background: rgba(255, 255, 255, 0.5); /* สีขาวโปร่งแสง */
+            border-radius: 50%;
             pointer-events: none;
-            animation: heartFloat linear infinite;
-            line-height: 1;
+            animation: dustFloat linear infinite;
         }
 
-        @keyframes heartFloat {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        @keyframes dustFloat {
+            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
         }
 
         #app {
@@ -155,19 +154,19 @@
         <div class="blob green"></div>
     </div>
 
-    <div class="particle-container" id="heart-container"></div>
+    <div class="particle-container" id="dust-container"></div>
 
     <div id="app">
         <section id="screen-start" class="screen active">
             <h1>The Truth I Can't Say</h1>
             <p>โอบกอดความรู้สึกของคุณด้วยความอ่อนโยน<br>ในพื้นที่ส่วนตัวแห่งนี้</p>
-            <button onclick="nextScreen('screen-quiz')">เริ่มบันทึกความรู้สึก</button>
+            <button onclick="nextScreen('screen-quiz')">เริ่มสำรวจใจตัวเอง</button>
         </section>
 
         <section id="screen-quiz" class="screen">
             <div class="progress-wrap"><div id="progress"></div></div>
             <h2 id="question-text">...</h2>
-            <textarea id="answer-input" placeholder="พิมพ์สิ่งที่อยู่ในใจคุณ..."></textarea>
+            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
             <div style="display: flex; gap: 15px;">
                 <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
                 <button onclick="nextQuestion()">ข้อถัดไป</button>
@@ -175,54 +174,43 @@
         </section>
 
         <section id="screen-end" class="screen">
-            <h2>ขอบคุณที่แบ่งปันความจริง</h2>
-            <p style="font-size: 0.9rem;">ความรู้สึกของคุณมีความหมายเสมอ</p>
+            <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
+            <p style="font-size: 0.9rem;">คุณเก่งมากที่ผ่านวันนี้มาได้</p>
             <iframe src="https://forms.gle/9fysEnT76Vnacu497" width="100%" height="320" frameborder="0">กำลังโหลด…</iframe>
             <button onclick="nextScreen('screen-thanks')" style="margin-top: 20px;">จบบันทึก</button>
         </section>
 
         <section id="screen-thanks" class="screen">
-            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ 🤍</h2>
+            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ</h2>
             <button onclick="location.reload()">กลับหน้าแรก</button>
         </section>
     </div>
 
     <script>
-        // --- ระบบสร้างละอองหัวใจสีขาวจิ๋ว ---
-        const heartContainer = document.getElementById('heart-container');
-        const heartCount = 40; // เพิ่มจำนวนเล็กน้อยเพราะขนาดจิ๋วลง
+        // --- ส่วนสำหรับสร้างละอองจิ๋ว (Dust Particles) ---
+        const dustContainer = document.getElementById('dust-container');
+        const dustCount = 45; // เพิ่มจำนวนเพื่อให้ดูหนาแน่นแต่บางเบา
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '❤'; 
+        for (let i = 0; i < dustCount; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'particle';
             
-            // ขนาดจิ๋ว (ประมาณละอองเล็กๆ)
-            const size = Math.random() * 6 + 6 + 'px'; 
-            heart.style.fontSize = size;
+            // ขนาดเล็กมากๆ (1-3px)
+            const size = Math.random() * 2 + 1 + 'px'; 
+            dust.style.width = size;
+            dust.style.height = size;
 
-            // สุ่มตำแหน่งแนวนอน
-            heart.style.left = Math.random() * 100 + 'vw';
+            // สุ่มตำแหน่งเริ่มต้น
+            dust.style.left = Math.random() * 100 + 'vw';
+            dust.style.top = Math.random() * 100 + 'vh';
 
-            // ความเร็วที่ช้าและสุ่มเพื่อให้ดูเป็นธรรมชาติ
-            const duration = Math.random() * 15 + 15 + 's'; 
-            heart.style.animationDuration = duration;
-            heart.style.animationDelay = Math.random() * 10 + 's';
+            // สุ่มความเร็ว (ลอยช้าเป็นพิเศษ 20-35 วินาที)
+            dust.style.animationDuration = Math.random() * 15 + 20 + 's'; 
+            dust.style.animationDelay = Math.random() * 10 + 's';
 
-            heartContainer.appendChild(heart);
-
-            // วนลูปสร้างใหม่
-            setTimeout(() => {
-                heart.remove();
-                createHeart();
-            }, (parseFloat(duration) + 10) * 1000);
+            dustContainer.appendChild(dust);
         }
 
-        for (let i = 0; i < heartCount; i++) {
-            createHeart();
-        }
-
-        // คำถาม 32 ข้อ
         const questions = [
             { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
             { q: "ถ้าความรู้สึกตอนนี้พูดได้ มันอยากบอกอะไรคุณ" },
