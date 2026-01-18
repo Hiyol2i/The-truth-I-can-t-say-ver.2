@@ -8,12 +8,11 @@
     
     <style>
         :root {
-            /* ปรับสีพาสเทลให้เข้มขึ้น (Saturated Pastel) */
             --warm-pink: #ffb1c1;
             --warm-yellow: #ffe08a;
             --warm-green: #a7d7b5;
-            --bg-creme: #fdf5e6; /* สีครีมเข้มขึ้นให้ฟีลกระดาษเก่าที่อบอุ่น */
-            --text-main: #4a4453; /* สีตัวอักษรเข้มขึ้นเพื่อให้อ่านง่าย */
+            --bg-creme: #fdf5e6; 
+            --text-main: #4a4453; 
             --glass-card: rgba(255, 255, 255, 0.65);
         }
 
@@ -33,7 +32,7 @@
             position: relative;
         }
 
-        /* --- ปรับแต่งก้อนสีให้เข้มขึ้นและเคลื่อนไหวแบบ Organic --- */
+        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -56,6 +55,29 @@
         @keyframes floating {
             0% { transform: translate(0, 0) rotate(0deg) scale(1); }
             100% { transform: translate(10%, 15%) rotate(15deg) scale(1.1); }
+        }
+
+        /* --- Floating Particles (ละอองลอยใหม่) --- */
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* ทำให้ละอองหายไปเมื่อออกนอกจอ */
+            z-index: 0; /* อยู่ด้านล่างการ์ด แต่เหนือ blob */
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6); /* สีขาวขุ่นๆ */
+            border-radius: 50%;
+            pointer-events: none; /* ทำให้คลิกผ่านได้ */
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
         #app {
@@ -91,7 +113,6 @@
         h2 { font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; color: var(--text-main); }
         p { font-weight: 300; line-height: 1.6; color: #6b6378; }
 
-        /* แถบ Progress ที่เข้มขึ้น */
         .progress-wrap {
             width: 100%; height: 8px; background: rgba(0,0,0,0.05);
             border-radius: 10px; margin-bottom: 25px; overflow: hidden;
@@ -138,6 +159,8 @@
         <div class="blob green"></div>
     </div>
 
+    <div class="particle-container" id="particle-container"></div>
+
     <div id="app">
         <section id="screen-start" class="screen active">
             <h1>The Truth I Can't Say</h1>
@@ -169,6 +192,30 @@
     </div>
 
     <script>
+        // --- ส่วนสำหรับสร้างละอองลอย (Particles) ---
+        const particleContainer = document.getElementById('particle-container');
+        const numParticles = 30; // จำนวนละอองที่ต้องการ
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // สุ่มขนาด
+            const size = Math.random() * 4 + 1 + 'px'; // ขนาด 1-5px
+            particle.style.width = size;
+            particle.style.height = size;
+
+            // สุ่มตำแหน่งเริ่มต้น
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = Math.random() * 100 + 'vh'; // เริ่มต้นจากทุกตำแหน่งในจอ
+
+            // สุ่มความเร็วและดีเลย์
+            particle.style.animationDuration = Math.random() * 15 + 10 + 's'; // ระยะเวลา 10-25 วินาที
+            particle.style.animationDelay = Math.random() * 10 + 's'; // ดีเลย์ 0-10 วินาที
+
+            particleContainer.appendChild(particle);
+        }
+
         // ใช้คำถาม 32 ข้อเดิมของคุณ
         const questions = [
             { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
@@ -224,7 +271,6 @@
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
             
-            // อนิเมชั่นคำถามแบบนุ่มนวล
             qText.style.opacity = 0;
             qText.style.transform = "scale(0.95)";
             
