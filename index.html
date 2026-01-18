@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs --- */
+        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -57,29 +57,29 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- แก้ไข Dust Particles ให้ชัดขึ้น --- */
+        /* --- Dust Particles (ละอองแบบลอยวน) --- */
         .particle-container {
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: 1; /* ปรับ z-index ให้สูงขึ้นเล็กน้อย */
+            z-index: 1;
             overflow: hidden;
             pointer-events: none;
         }
 
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9); /* เพิ่มความเข้มจาก 0.5 เป็น 0.9 */
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* เพิ่มแสงเรืองเพื่อให้เห็นชัดขึ้น */
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
             animation: dustFloat linear infinite;
         }
 
         @keyframes dustFloat {
-            0% { transform: translateY(105vh) translateX(0); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+            0% { transform: translate(0, 0); opacity: 0; }
+            15% { opacity: 0.8; }
+            85% { opacity: 0.8; }
+            100% { transform: translate(20px, -100vh); opacity: 0; }
         }
 
         #app {
@@ -109,23 +109,23 @@
 
         h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
         
-        /* --- อนิเมชั่นคำถามเลื่อนจากล่างขึ้นบน --- */
+        /* --- Animation คำถามเลื่อนจากล่างขึ้นบน --- */
         h2 { 
             font-size: 1.3rem; 
             font-weight: 300; 
             line-height: 1.6; 
             margin-bottom: 1.5rem; 
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* ลื่นไหลขึ้น */
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .question-hide {
             opacity: 0;
-            transform: translateY(20px); /* ลงไปข้างล่าง */
+            transform: translateY(25px);
         }
 
         .question-show {
             opacity: 1;
-            transform: translateY(0); /* กลับมาที่เดิม */
+            transform: translateY(0);
         }
 
         .progress-wrap {
@@ -206,24 +206,26 @@
     </div>
 
     <script>
-        // --- ปรับปรุง Dust Particles ให้ชัดขึ้น ---
+        // --- ระบบ Dust Particles แบบลอยวนเวียน ---
         const dustContainer = document.getElementById('dust-container');
-        const dustCount = 40; 
+        const dustCount = 45; 
 
         for (let i = 0; i < dustCount; i++) {
             const dust = document.createElement('div');
             dust.className = 'particle';
             
-            // ขนาดใหญ่ขึ้นเล็กน้อย (2-4px)
-            const size = Math.random() * 2 + 2 + 'px'; 
+            const size = Math.random() * 3 + 1 + 'px'; 
             dust.style.width = size;
             dust.style.height = size;
 
+            // สุ่มตำแหน่งกระจายทั่วจอ
             dust.style.left = Math.random() * 100 + 'vw';
             dust.style.top = Math.random() * 100 + 'vh';
 
-            dust.style.animationDuration = Math.random() * 10 + 15 + 's'; 
-            dust.style.animationDelay = Math.random() * 5 + 's';
+            const duration = Math.random() * 15 + 20; // ลอยช้าๆ 20-35 วิ
+            dust.style.animationDuration = duration + 's'; 
+            // ใช้ delay ติดลบ เพื่อให้ฝุ่นกระจายตัวทันทีที่โหลดหน้า
+            dust.style.animationDelay = -(Math.random() * duration) + 's';
 
             dustContainer.appendChild(dust);
         }
@@ -282,16 +284,16 @@
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
             
-            // ซ่อนคำถามเดิม (เลื่อนลง)
+            // สไลด์คำถามเก่าออก
             qText.classList.remove('question-show');
             qText.classList.add('question-hide');
 
             setTimeout(() => {
                 qText.innerText = q.q;
-                // แสดงคำถามใหม่ (สไลด์ขึ้น)
+                // สไลด์คำถามใหม่จากล่างขึ้นบน
                 qText.classList.remove('question-hide');
                 qText.classList.add('question-show');
-            }, 500);
+            }, 400);
 
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
