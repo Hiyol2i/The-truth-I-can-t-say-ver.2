@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs (ก้อนสีพื้นหลัง) --- */
+        /* --- Ambient Blobs --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -57,7 +57,7 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Dust Particles (ละอองที่ลอยวนเวียน) --- */
+        /* --- Dust Particles --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -83,6 +83,12 @@
             100% { transform: translate(-10px, -100vh); opacity: 0; }
         }
 
+        #app {
+            width: 90%;
+            max-width: 500px;
+            z-index: 10;
+        }
+
         .screen {
             display: none;
             opacity: 0;
@@ -103,8 +109,6 @@
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
         h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        
-        /* Animation คำถามสไลด์ขึ้น */
         h2 { 
             font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; 
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -157,13 +161,6 @@
 
     <div class="particle-container" id="dust-container"></div>
 
-    <div class="decoration-overlay" id="decor-overlay">
-        <img src="https://via.placeholder.com/100x100/ffb1c1/ffffff?text=✿" class="decor-tl">
-        <img src="https://via.placeholder.com/100x100/ffe08a/ffffff?text=☁" class="decor-tr">
-        <img src="https://via.placeholder.com/100x100/a7d7b5/ffffff?text=🌿" class="decor-bl">
-        <img src="https://via.placeholder.com/100x100/ffb1c1/ffffff?text=♡" class="decor-br">
-    </div>
-
     <div id="app">
         <section id="screen-intro" class="screen active">
             <h1>The Truth I Can't Say</h1>
@@ -197,7 +194,7 @@
             <p style="font-size: 0.9rem; margin-bottom: 20px;">คุณเก่งมากที่ผ่านวันนี้มาได้<br>หากมีอะไรอยากบอกเพิ่มเติม พิมพ์ไว้ที่นี่ได้นะ</p>
             
             <iframe 
-                src="https://forms.gle/9fysEnT76Vnacu497" 
+                src="https://forms.gle/UGRQqBCiE7XwwWSP6" 
                 width="100%" 
                 height="350" 
                 frameborder="0" 
@@ -215,7 +212,7 @@
     </div>
 
     <script>
-        // 1. ระบบ Dust Particles (ลอยวนเวียนไม่วาร์ป)
+        // 1. Dust Particles System
         const dustContainer = document.getElementById('dust-container');
         for (let i = 0; i < 45; i++) {
             const dust = document.createElement('div');
@@ -230,7 +227,7 @@
             dustContainer.appendChild(dust);
         }
 
-        // 2. ข้อมูลคำถาม (ปรับภาษาแล้ว)
+        // 2. Questions Data
         const questions = [
             { q: "ในตอนนี้, คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้, มันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
@@ -268,20 +265,12 @@
 
         let currentIdx = 0;
 
-        // 3. ฟังก์ชันควบคุมการเปลี่ยนหน้า
+        // 3. Screen Transition Control
         function changeScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
             if (currentActive) {
                 currentActive.style.opacity = '0';
                 currentActive.style.transform = 'translateY(-20px)';
-            }
-
-            // แสดง Decor เฉพาะหน้า Intro และ Warning และตอนขอบคุณ
-            const decor = document.getElementById('decor-overlay');
-            if (['screen-intro', 'screen-warning', 'screen-thanks'].includes(screenId)) {
-                decor.classList.add('active');
-            } else {
-                decor.classList.remove('active');
             }
 
             setTimeout(() => {
@@ -294,7 +283,7 @@
             }, 600);
         }
 
-        // 4. ฟังก์ชันจัดการคำถาม
+        // 4. Question Rendering
         function renderQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
@@ -320,11 +309,6 @@
                 changeScreen('screen-end');
             }
         }
-
-        // เริ่มต้นระบบเมื่อโหลดหน้าเสร็จ
-        window.onload = () => {
-            document.getElementById('decor-overlay').classList.add('active');
-        };
     </script>
 </body>
 </html>
