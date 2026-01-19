@@ -1,312 +1,114 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Truth I Can't Say</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --warm-pink: #ffb1c1;
-            --warm-yellow: #ffe08a;
-            --warm-green: #a7d7b5;
-            --bg-creme: #fdf5e6; 
-            --text-main: #4a4453; 
-            --glass-card: rgba(255, 255, 255, 0.7);
-        }
+<script>
+    // --- 1. Dust Particles (เหมือนเดิม) ---
+    const dustContainer = document.getElementById('dust-container');
+    const dustCount = 45; 
+    for (let i = 0; i < dustCount; i++) {
+        const dust = document.createElement('div');
+        dust.className = 'particle';
+        const size = Math.random() * 3 + 1 + 'px'; 
+        dust.style.width = size; dust.style.height = size;
+        dust.style.left = Math.random() * 100 + 'vw';
+        dust.style.top = Math.random() * 100 + 'vh';
+        const duration = Math.random() * 20 + 20;
+        dust.style.animationDuration = duration + 's'; 
+        dust.style.animationDelay = -(Math.random() * duration) + 's';
+        dustContainer.appendChild(dust);
+    }
 
-        * { box-sizing: border-box; }
+    // --- 2. Questions (ฉบับปรับปรุงภาษา) ---
+    const questions = [
+        { q: "ในตอนนี้, คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
+        { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้, มันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
+        { q: "วันนี้มีช่วงเวลาไหนบ้าง ที่คุณรู้สึกว่าเป็นตัวของตัวเองมากที่สุดจริงๆ" },
+        { q: "มีความรู้สึกบางอย่างที่คุณกำลังพยายามจะหลีกเลี่ยงหรือเปล่า" },
+        { q: "สมมติว่าคุณไม่จำเป็นต้องเก่ง ไม่ต้องเข้มแข็ง คุณอยากจะเป็นคนแบบไหน" },
+        { q: "เวลาที่คุณต้องตัดสินใจเรื่องสำคัญ, คุณมักจะฟังเสียงของใครมากที่สุด" },
+        { q: "มีการตัดสินใจเรื่องไหนบ้างไหม ที่ยังคงค้างคาอยู่ในใจคุณจนถึงตอนนี้" },
+        { q: "ถ้าหากคุณตัดสินใจเพื่อตัวเองอย่างแท้จริง, ผลลัพธ์ในวันนี้อาจแตกต่างไปจากเดิมบ้างไหม" },
+        { q: "อะไรคือสิ่งที่ทำให้คุณรู้สึกลังเล เวลาที่คุณจะต้องตัดสินใจเลือกบางสิ่ง" },
+        { q: "ถ้าหากไม่มีใครต้องผิดหวัง, มีอะไรบ้างที่คุณอยากจะเลือกทำ" },
+        { q: "เมื่อคุณอยู่ร่วมกับผู้อื่น, คุณรู้สึกเป็นตัวของตัวเองมากน้อยแค่ไหน" },
+        { q: "มีใครบางคนในชีวิตที่คุณอยากจะบอกความจริงกับเขาหรือเธอไหม" },
+        { q: "คุณรู้สึกสบายใจกับ 'ความเงียบ' ที่เกิดขึ้นในความสัมพันธ์ของคุณบ้างหรือเปล่า" },
+        { q: "ในตอนนี้, คุณกำลังให้ความสำคัญกับความรู้สึกของใครเป็นพิเศษมากที่สุด" },
+        { q: "คุณเคยรู้สึกไหมว่าต้องพยายามเป็นคนเดิม เพื่อให้ใครสักคนยังคงอยู่กับคุณ" },
+        { q: "มีความคาดหวังบางอย่างที่คุณแบกรับไว้โดยไม่รู้ตัวบ้างไหม" },
+        { q: "สิ่งที่คุณกำลังพยายามทำอยู่ตอนนี้, มันเป็นสิ่งที่คุณต้องการจริงๆ หรือเปล่า" },
+        { q: "คุณกลัวอะไรมากที่สุด หากคุณเลือกที่จะแตกต่างไปจากคนอื่น" },
+        { q: "ถ้าหากคุณไม่ต้องพิสูจน์อะไรกับใคร, ชีวิตของคุณจะรู้สึกเบาลงบ้างไหม" },
+        { q: "มีอะไรบ้างที่คุณอยากจะปล่อยวาง แต่ก็ยังทำไม่ได้ในตอนนี้" },
+        { q: "ครั้งสุดท้ายที่คุณใจดีและเมตตาต่อตัวเองคือเมื่อไหร่กันนะ" },
+        { q: "เวลาที่คุณรู้สึกเหนื่อยล้า, คุณมักจะทำอะไรเป็นสิ่งแรกเสมอ" },
+        { q: "ตอนนี้ร่างกายหรือจิตใจของคุณกำลังต้องการอะไรมากที่สุดกันนะ" },
+        { q: "คุณอนุญาตให้ตัวเองได้พักผ่อน โดยไม่ต้องรู้สึกผิดบ้างไหม" },
+        { q: "ถ้าคุณดูแลตัวเองเหมือนที่คุณดูแลคนที่คุณรัก, มันจะแตกต่างกันบ้างไหม" },
+        { q: "ตอนนี้อะไรในชีวิตที่คุณอยากจะรักษาเอาไว้มากที่สุด" },
+        { q: "มีอะไรเล็กๆ น้อยๆ ที่ทำให้คุณยังอยากตื่นขึ้นมาในทุกวันบ้างไหม" },
+        { q: "ถ้าคุณไม่ต้องรีบร้อนทำอะไร, ชีวิตของคุณจะเป็นไปในจังหวะแบบไหน" },
+        { q: "อนาคตแบบไหนที่คุณไม่อยากจะเสียความเป็นตัวเองไปเลย" },
+        { q: "สำหรับวันนี้, คุณอยากจะขอบคุณตัวเองในเรื่องอะไรมากที่สุด" },
+        { q: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน หรือพยายามหนีมัน และเพราะอะไร" },
+        { q: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี เราอยากเป็นแบบไหน" }
+    ];
 
-        body {
-            margin: 0;
-            font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-creme);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            position: relative;
-        }
+    let currentIdx = 0;
 
-        /* --- Ambient Blobs (ก้อนสีเคลื่อนไหว) --- */
-        .ambient-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            filter: blur(60px);
-            opacity: 0.8;
-        }
-
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            animation: floating 25s infinite alternate ease-in-out;
-        }
-
-        .pink { background: var(--warm-pink); width: 65vw; height: 65vw; top: -15%; left: -10%; }
-        .yellow { background: var(--warm-yellow); width: 75vw; height: 75vw; bottom: -20%; right: -10%; animation-delay: -5s; }
-        .green { background: var(--warm-green); width: 55vw; height: 55vw; top: 20%; left: 30%; animation-delay: -10s; }
-
-        @keyframes floating {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(12%, 18%) scale(1.1); }
-        }
-
-        /* --- Dust Particles (ละอองแบบลอยวน) --- */
-        .particle-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
-            animation: dustFloat linear infinite;
-        }
-
-        @keyframes dustFloat {
-            0% { transform: translate(0, 0); opacity: 0; }
-            15% { opacity: 0.8; }
-            85% { opacity: 0.8; }
-            100% { transform: translate(20px, -100vh); opacity: 0; }
-        }
-
-        #app {
-            width: 90%;
-            max-width: 500px;
-            z-index: 10;
-        }
-
-        .screen {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-direction: column;
-            align-items: center;
-            background: var(--glass-card);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid white;
-            border-radius: 45px;
-            padding: 40px 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-
-        .screen.active { display: flex; opacity: 1; transform: translateY(0); }
-
-        h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        
-        /* --- Animation คำถามเลื่อนจากล่างขึ้นบน --- */
-        h2 { 
-            font-size: 1.3rem; 
-            font-weight: 300; 
-            line-height: 1.6; 
-            margin-bottom: 1.5rem; 
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .question-hide {
-            opacity: 0;
-            transform: translateY(25px);
-        }
-
-        .question-show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .progress-wrap {
-            width: 100%; height: 6px; background: rgba(0,0,0,0.05);
-            border-radius: 10px; margin-bottom: 25px; overflow: hidden;
-        }
-
-        #progress {
-            width: 0%; height: 100%;
-            background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999);
-            transition: width 0.8s ease;
-        }
-
-        textarea {
-            width: 100%; height: 140px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid transparent;
-            border-radius: 25px; color: var(--text-main); padding: 20px;
-            font-family: 'Kanit', sans-serif; font-size: 1.1rem;
-            resize: none; outline: none; text-align: center;
-            margin-bottom: 25px; transition: 0.3s;
-        }
-
-        textarea:focus { border-color: var(--warm-pink); background: white; }
-
-        button {
-            background: #4a4453; color: white; border: none;
-            padding: 14px 45px; border-radius: 30px; cursor: pointer;
-            font-size: 1rem; font-family: 'Kanit', sans-serif;
-            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        button:hover { transform: scale(1.05); background: #35313d; }
-
-        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.8rem; }
-        
-        iframe { border-radius: 25px; margin-top: 15px; border: 1px solid #eee; }
-    </style>
-</head>
-<body>
-
-    <div class="ambient-bg">
-        <div class="blob pink"></div>
-        <div class="blob yellow"></div>
-        <div class="blob green"></div>
-    </div>
-
-    <div class="particle-container" id="dust-container"></div>
-
-    <div id="app">
-        <section id="screen-start" class="screen active">
-            <h1>The Truth I Can't Say</h1>
-            <p>โอบกอดความรู้สึกของคุณด้วยความอ่อนโยน<br>ในพื้นที่ส่วนตัวแห่งนี้</p>
-            <button onclick="nextScreen('screen-quiz')">เริ่มสำรวจใจตัวเอง</button>
-        </section>
-
-        <section id="screen-quiz" class="screen">
-            <div class="progress-wrap"><div id="progress"></div></div>
-            <h2 id="question-text" class="question-show">...</h2>
-            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
-            <div style="display: flex; gap: 15px;">
-                <button class="btn-skip" onclick="nextQuestion()">ข้าม</button>
-                <button onclick="nextQuestion()">ข้อถัดไป</button>
-            </div>
-        </section>
-
-        <section id="screen-end" class="screen">
-            <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
-            <p style="font-size: 0.9rem;">คุณเก่งมากที่ผ่านวันนี้มาได้</p>
-            <iframe src="https://forms.gle/9fysEnT76Vnacu497" width="100%" height="320" frameborder="0">กำลังโหลด…</iframe>
-            <button onclick="nextScreen('screen-thanks')" style="margin-top: 20px;">จบบันทึก</button>
-        </section>
-
-        <section id="screen-thanks" class="screen">
-            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ</h2>
-            <button onclick="location.reload()">กลับหน้าแรก</button>
-        </section>
-    </div>
-
-    <script>
-        // --- ระบบ Dust Particles แบบลอยวนเวียน ---
-        const dustContainer = document.getElementById('dust-container');
-        const dustCount = 45; 
-
-        for (let i = 0; i < dustCount; i++) {
-            const dust = document.createElement('div');
-            dust.className = 'particle';
-            
-            const size = Math.random() * 3 + 1 + 'px'; 
-            dust.style.width = size;
-            dust.style.height = size;
-
-            // สุ่มตำแหน่งกระจายทั่วจอ
-            dust.style.left = Math.random() * 100 + 'vw';
-            dust.style.top = Math.random() * 100 + 'vh';
-
-            const duration = Math.random() * 15 + 20; // ลอยช้าๆ 20-35 วิ
-            dust.style.animationDuration = duration + 's'; 
-            // ใช้ delay ติดลบ เพื่อให้ฝุ่นกระจายตัวทันทีที่โหลดหน้า
-            dust.style.animationDelay = -(Math.random() * duration) + 's';
-
-            dustContainer.appendChild(dust);
-        }
-
-        const questions = [
-            { q: "ตอนนี้ในใจคุณกำลังรู้สึกอะไรอยู่มากที่สุด" },
-            { q: "ถ้าความรู้สึกตอนนี้พูดได้ มันอยากบอกอะไรคุณ" },
-            { q: "วันนี้มีช่วงไหนที่คุณรู้สึกเป็นตัวเองมากที่สุด" },
-            { q: "มีความรู้สึกอะไรที่คุณพยายามไม่รับฟังมันอยู่ไหม" },
-            { q: "ถ้าไม่ต้องเก่ง ไม่ต้องเข้มแข็ง คุณอยากเป็นแบบไหน" },
-            { q: "เวลาต้องตัดสินใจ คุณมักฟังเสียงใครมากที่สุด" },
-            { q: "มีการตัดสินใจเรื่องไหนที่ยังค้างอยู่ในใจคุณ" },
-            { q: "ถ้าคุณเลือกเพื่อตัวเองจริงๆ ผลลัพธ์อาจต่างจากตอนนี้ไหม" },
-            { q: "อะไรทำให้คุณลังเลเวลาจะเลือกบางอย่าง" },
-            { q: "ถ้าไม่มีใครผิดหวัง คุณอยากเลือกอะไร" },
-            { q: "เวลาคุณอยู่กับคนอื่น คุณรู้สึกเป็นตัวเองแค่ไหน" },
-            { q: "มีใครบางคนที่คุณอยากพูดความจริงกับเขาไหม" },
-            { q: "คุณรู้สึกสบายใจกับความเงียบในความสัมพันธ์หรือเปล่า" },
-            { q: "ตอนนี้คุณให้ความสำคัญกับความรู้สึกของใครมากที่สุด" },
-            { q: "คุณเคยรู้สึกว่าต้องเป็นคนเดิมเพื่อให้ใครสักคนอยู่ไหม" },
-            { q: "มีความคาดหวังอะไรที่คุณแบกไว้โดยไม่รู้ตัว" },
-            { q: "สิ่งที่คุณพยายามทำอยู่ตอนนี้ เป็นของคุณจริงๆ ไหม" },
-            { q: "คุณกลัวอะไรที่สุด ถ้าคุณเลือกต่างจากคนอื่น" },
-            { q: "ถ้าคุณไม่ต้องพิสูจน์อะไรกับใคร ชีวิตจะเบาลงไหม" },
-            { q: "มีอะไรที่คุณอยากปล่อยวาง แต่ยังทำไม่ได้" },
-            { q: "ครั้งสุดท้ายที่คุณใจดีกับตัวเองคือเมื่อไหร่" },
-            { q: "ตอนเหนื่อย คุณมักทำอะไรเป็นอย่างแรก" },
-            { q: "ร่างกายหรือใจคุณกำลังต้องการอะไรในตอนนี้" },
-            { q: "คุณอนุญาตให้ตัวเองพักโดยไม่รู้สึกผิดบ้างไหม" },
-            { q: "ถ้าคุณดูแลตัวเองเหมือนดูแลคนที่รัก มันจะต่างไหม" },
-            { q: "ตอนนี้อะไรในชีวิตที่คุณอยากรักษาไว้" },
-            { q: "มีอะไรเล็กๆ ที่ทำให้คุณยังอยากตื่นขึ้นมาในทุกวัน" },
-            { q: "ถ้าคุณไม่ต้องรีบ ชีวิตคุณจะเป็นจังหวะแบบไหน" },
-            { q: "อนาคตแบบไหนที่คุณไม่อยากเสียตัวเองไป" },
-            { q: "วันนี้ คุณอยากขอบคุณตัวเองเรื่องอะไร" },
-            { q: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน หรือพยายามหนีมัน เพราะอะไร" },
-            { q: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี เราอยากเป็นแบบไหน" }
-        ];
-
-        let currentIdx = 0;
-
-        function nextScreen(screenId) {
-            const currentActive = document.querySelector('.screen.active');
+    // --- 3. หน้าจอ (ฟังก์ชันเปลี่ยนหน้า) ---
+    function nextScreen(screenId) {
+        const currentActive = document.querySelector('.screen.active');
+        if (currentActive) {
             currentActive.style.opacity = 0;
             currentActive.style.transform = "translateY(-20px)";
-            
-            setTimeout(() => {
-                currentActive.classList.remove('active');
-                const next = document.getElementById(screenId);
+        }
+        
+        // ควบคุมการแสดงผลของกรอบรูป (Decoration)
+        const decor = document.getElementById('decor-overlay');
+        if (screenId === 'screen-intro' || screenId === 'screen-warning') {
+            decor.classList.add('active');
+        } else {
+            decor.classList.remove('active');
+        }
+
+        setTimeout(() => {
+            if (currentActive) currentActive.classList.remove('active');
+            const next = document.getElementById(screenId);
+            if (next) {
                 next.classList.add('active');
+                next.style.opacity = 1;
+                next.style.transform = "translateY(0)";
                 if(screenId === 'screen-quiz') showQuestion();
-            }, 800);
-        }
-
-        function showQuestion() {
-            const q = questions[currentIdx];
-            const qText = document.getElementById('question-text');
-            
-            // สไลด์คำถามเก่าออก
-            qText.classList.remove('question-show');
-            qText.classList.add('question-hide');
-
-            setTimeout(() => {
-                qText.innerText = q.q;
-                // สไลด์คำถามใหม่จากล่างขึ้นบน
-                qText.classList.remove('question-hide');
-                qText.classList.add('question-show');
-            }, 400);
-
-            document.getElementById('answer-input').value = "";
-            document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
-        }
-
-        function nextQuestion() {
-            if (currentIdx < questions.length - 1) {
-                currentIdx++;
-                showQuestion();
-            } else {
-                nextScreen('screen-end');
             }
+        }, 600);
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        const qText = document.getElementById('question-text');
+        
+        qText.classList.remove('question-show');
+        qText.classList.add('question-hide');
+
+        setTimeout(() => {
+            qText.innerText = q.q;
+            qText.classList.remove('question-hide');
+            qText.classList.add('question-show');
+        }, 400);
+
+        document.getElementById('answer-input').value = "";
+        document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            showQuestion();
+        } else {
+            nextScreen('screen-end');
         }
-    </script>
-</body>
-</html>
+    }
+
+    // เริ่มต้นให้แสดง Decor ทันทีที่โหลดหน้าแรก
+    window.onload = () => {
+        document.getElementById('decor-overlay').classList.add('active');
+    };
+</script>
