@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs --- */
+        /* --- Ambient Blobs (ก้อนสีพื้นหลัง) --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -57,7 +57,7 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Dust Particles --- */
+        /* --- Dust Particles (ละอองที่ลอยวนเวียน) --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -83,7 +83,7 @@
             100% { transform: translate(-10px, -100vh); opacity: 0; }
         }
 
-        /* --- Decoration (กรอบรูป) --- */
+        /* --- Decoration Overlay (กรอบรูปสัตว์/ดอกไม้) --- */
         .decoration-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -97,11 +97,12 @@
 
         .decoration-overlay img {
             position: absolute;
-            max-width: 120px;
+            max-width: 120px; /* ปรับขนาดรูปตามต้องการ */
             height: auto;
             opacity: 0.7;
         }
 
+        /* ตำแหน่งรูปตกแต่งมุมต่างๆ */
         .decor-tl { top: 5%; left: 5%; transform: rotate(-10deg); }
         .decor-tr { top: 5%; right: 5%; transform: rotate(15deg); }
         .decor-bl { bottom: 5%; left: 5%; transform: rotate(10deg); }
@@ -134,10 +135,10 @@
 
         h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
         
-        /* Animation คำถาม */
+        /* Animation คำถามสไลด์ขึ้น */
         h2 { 
             font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; 
-            transition: all 0.6s ease;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .question-hide { opacity: 0; transform: translateY(20px); }
@@ -203,7 +204,7 @@
 
         <section id="screen-warning" class="screen">
             <h1>ข้อแนะนำก่อนเริ่ม</h1>
-            <p style="line-height: 1.8; color: #d66d75;">
+            <p style="line-height: 1.8; color: #d66d75; padding: 0 10px;">
                 นี่ไม่ใช่แบบทดสอบ หรือการประเมิน<br>
                 แต่เป็นพื้นที่ปลอดภัยสำหรับการสำรวจความรู้สึกของคุณ<br>
                 ไม่มีคำตอบถูกหรือผิด ไม่มีใครตัดสินคุณ<br>
@@ -224,8 +225,18 @@
 
         <section id="screen-end" class="screen">
             <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
-            <p>คุณเก่งมากที่ผ่านวันนี้มาได้</p>
-            <button onclick="changeScreen('screen-thanks')">จบบันทึก</button>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">คุณเก่งมากที่ผ่านวันนี้มาได้<br>หากมีอะไรอยากบอกเพิ่มเติม พิมพ์ไว้ที่นี่ได้นะ</p>
+            
+            <iframe 
+                src="https://forms.gle/9fysEnT76Vnacu497" 
+                width="100%" 
+                height="350" 
+                frameborder="0" 
+                style="border-radius: 25px; border: 1px solid #f0f0f0;">
+                กำลังโหลด…
+            </iframe>
+
+            <button onclick="changeScreen('screen-thanks')" style="margin-top: 25px;">จบบันทึก</button>
         </section>
 
         <section id="screen-thanks" class="screen">
@@ -235,7 +246,7 @@
     </div>
 
     <script>
-        // 1. สร้างละอองฝุ่น
+        // 1. ระบบ Dust Particles (ลอยวนเวียนไม่วาร์ป)
         const dustContainer = document.getElementById('dust-container');
         for (let i = 0; i < 45; i++) {
             const dust = document.createElement('div');
@@ -244,13 +255,13 @@
             dust.style.width = size; dust.style.height = size;
             dust.style.left = Math.random() * 100 + 'vw';
             dust.style.top = Math.random() * 100 + 'vh';
-            const duration = Math.random() * 15 + 20;
+            const duration = Math.random() * 20 + 20;
             dust.style.animationDuration = duration + 's';
             dust.style.animationDelay = -(Math.random() * duration) + 's';
             dustContainer.appendChild(dust);
         }
 
-        // 2. ข้อมูลคำถาม
+        // 2. ข้อมูลคำถาม (ปรับภาษาแล้ว)
         const questions = [
             { q: "ในตอนนี้, คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้, มันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
@@ -288,7 +299,7 @@
 
         let currentIdx = 0;
 
-        // 3. ฟังก์ชันเปลี่ยนหน้า
+        // 3. ฟังก์ชันควบคุมการเปลี่ยนหน้า
         function changeScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
             if (currentActive) {
@@ -296,9 +307,9 @@
                 currentActive.style.transform = 'translateY(-20px)';
             }
 
-            // คุมการแสดงกรอบรูป
+            // แสดง Decor เฉพาะหน้า Intro และ Warning และตอนขอบคุณ
             const decor = document.getElementById('decor-overlay');
-            if (screenId === 'screen-intro' || screenId === 'screen-warning') {
+            if (['screen-intro', 'screen-warning', 'screen-thanks'].includes(screenId)) {
                 decor.classList.add('active');
             } else {
                 decor.classList.remove('active');
@@ -307,33 +318,31 @@
             setTimeout(() => {
                 if (currentActive) currentActive.classList.remove('active');
                 const next = document.getElementById(screenId);
-                next.classList.add('active');
-                
-                // กระตุ้นให้คำถามแรกแสดงผลถ้าเข้าสู่หน้า Quiz
-                if (screenId === 'screen-quiz') {
-                    renderQuestion();
+                if (next) {
+                    next.classList.add('active');
+                    if (screenId === 'screen-quiz') renderQuestion();
                 }
             }, 600);
         }
 
-        // 4. ฟังก์ชันแสดงคำถาม
+        // 4. ฟังก์ชันจัดการคำถาม
         function renderQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
             
+            qText.classList.remove('question-show');
             qText.classList.add('question-hide');
-            
+
             setTimeout(() => {
                 qText.innerText = q.q;
                 qText.classList.remove('question-hide');
                 qText.classList.add('question-show');
-            }, 300);
+            }, 400);
 
             document.getElementById('answer-input').value = "";
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
 
-        // 5. ฟังก์ชันกดถัดไปในหน้าคำถาม
         function handleNextQuestion() {
             if (currentIdx < questions.length - 1) {
                 currentIdx++;
@@ -343,7 +352,7 @@
             }
         }
 
-        // เริ่มต้น
+        // เริ่มต้นระบบเมื่อโหลดหน้าเสร็จ
         window.onload = () => {
             document.getElementById('decor-overlay').classList.add('active');
         };
