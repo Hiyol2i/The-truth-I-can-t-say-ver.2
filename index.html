@@ -58,6 +58,7 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
+        /* --- Dust Particles --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -139,11 +140,23 @@
             border-radius: 25px; color: var(--text-main); padding: 18px;
             font-family: 'Kanit', sans-serif; font-size: 1rem;
             resize: none; outline: none; text-align: center;
-            margin-bottom: 25px; transition: 0.3s;
+            margin-bottom: 25px; transition: all 0.3s;
         }
 
         textarea:focus { border-color: var(--warm-pink); background: white; }
-        textarea.error { border-color: var(--error-red); background: #fff5f5; }
+        
+        /* สไตล์เมื่อเกิด Error */
+        textarea.input-error {
+            border: 2px solid var(--error-red);
+            background: #fffafa;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
 
         button {
             background: #4a4453; color: white; border: none;
@@ -216,7 +229,7 @@
             dustContainer.appendChild(dust);
         }
 
-        // 2. Questions
+        // 2. Questions List (เหมือนเดิม)
         const questions = [
             { q: "ในตอนนี้คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้ \nมันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
@@ -292,7 +305,7 @@
         function renderQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
-            const answerInput = document.getElementById('answer-input');
+            const input = document.getElementById('answer-input');
             
             qText.classList.remove('question-show');
             qText.classList.add('question-hide');
@@ -303,31 +316,32 @@
                 qText.classList.add('question-show');
             }, 400);
 
-            answerInput.value = "";
-            answerInput.classList.remove('error'); // ล้างสถานะ Error
-            answerInput.placeholder = "พื้นที่นี้เป็นของคุณ...";
+            input.value = "";
+            input.classList.remove('input-error'); // ล้างสถานะ Error
+            input.placeholder = "พื้นที่นี้เป็นของคุณ...";
             
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
 
         function handleNextQuestion(isSkip) {
-            const answerInput = document.getElementById('answer-input');
-            const currentAnswer = answerInput.value.trim();
+            const input = document.getElementById('answer-input');
+            const value = input.value.trim();
 
-            // ถ้าไม่ได้กดข้าม และไม่มีการพิมพ์ข้อความ
-            if (!isSkip && currentAnswer === "") {
-                answerInput.classList.add('error');
-                answerInput.placeholder = "โปรดเขียนความในใจก่อน หรือกดข้าม...";
+            // 1. ตรวจสอบเงื่อนไขการบล็อก (Validation)
+            // ถ้ากดปุ่ม 'ข้อถัดไป' (isSkip = false) และไม่ได้พิมพ์อะไรเลย
+            if (!isSkip && value === "") {
+                input.classList.add('input-error');
+                input.placeholder = "โปรดระบายความในใจก่อนไปต่อนะ...";
                 
-                // สั่นเบาๆ เพื่อบอกว่าต้องกรอก
-                answerInput.style.transform = "translateX(5px)";
-                setTimeout(() => answerInput.style.transform = "translateX(-5px)", 50);
-                setTimeout(() => answerInput.style.transform = "translateX(0)", 100);
+                // ล้าง Animation เพื่อให้กดซ้ำแล้วสั่นอีกได้
+                setTimeout(() => {
+                    input.classList.remove('input-error');
+                }, 400);
                 
-                return;
+                return; // จบการทำงานทันที (ไม่เปลี่ยนข้อ)
             }
 
-            // ไปข้อต่อไป
+            // 2. ถ้าผ่านเงื่อนไข (กดข้าม หรือ พิมพ์แล้ว) ให้ไปข้อต่อไป
             if (currentIdx < questions.length - 1) {
                 currentIdx++;
                 renderQuestion();
