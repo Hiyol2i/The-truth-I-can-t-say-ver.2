@@ -108,17 +108,23 @@
 
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
-        h1 { font-size: 1.8rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
+        h1 { font-size: 1.5rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
+        
+        /* --- แก้ไขขนาดคำถามตรงนี้ --- */
         h2 { 
-            font-size: 1.3rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; 
+            font-size: 1.1rem; /* ลดขนาดจากเดิม */
+            font-weight: 300; 
+            line-height: 1.5; 
+            margin-bottom: 1.5rem; 
+            padding: 0 10px;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .question-hide { opacity: 0; transform: translateY(20px); }
+        .question-hide { opacity: 0; transform: translateY(15px); }
         .question-show { opacity: 1; transform: translateY(0); }
 
         .progress-wrap {
-            width: 100%; height: 6px; background: rgba(0,0,0,0.05);
+            width: 100%; height: 5px; background: rgba(0,0,0,0.05);
             border-radius: 10px; margin-bottom: 25px; overflow: hidden;
         }
 
@@ -129,11 +135,12 @@
         }
 
         textarea {
-            width: 100%; height: 140px;
+            width: 100%; height: 130px;
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid transparent;
-            border-radius: 25px; color: var(--text-main); padding: 20px;
-            font-family: 'Kanit', sans-serif; font-size: 1.1rem;
+            border-radius: 25px; color: var(--text-main); padding: 18px;
+            font-family: 'Kanit', sans-serif; 
+            font-size: 1rem; /* ปรับขนาดตัวอักษรในช่องพิมพ์ */
             resize: none; outline: none; text-align: center;
             margin-bottom: 25px; transition: 0.3s;
         }
@@ -142,13 +149,15 @@
 
         button {
             background: #4a4453; color: white; border: none;
-            padding: 14px 45px; border-radius: 30px; cursor: pointer;
-            font-size: 1rem; font-family: 'Kanit', sans-serif;
+            padding: 12px 40px; border-radius: 30px; cursor: pointer;
+            font-size: 0.95rem; font-family: 'Kanit', sans-serif;
             transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         button:hover { transform: scale(1.05); background: #35313d; }
         .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.8rem; }
+        
+        p { font-size: 0.95rem; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -170,7 +179,7 @@
 
         <section id="screen-warning" class="screen">
             <h1>ข้อแนะนำก่อนเริ่ม</h1>
-            <p style="line-height: 1.8; color: #d66d75; padding: 0 10px;">
+            <p style="color: #d66d75; padding: 0 10px;">
                 นี่ไม่ใช่แบบทดสอบ หรือการประเมิน<br>
                 แต่เป็นพื้นที่ปลอดภัยสำหรับการสำรวจ<br>
                 ความรู้สึกของคุณ<br>
@@ -191,13 +200,13 @@
         </section>
 
         <section id="screen-end" class="screen">
-            <h2>ขอบคุณที่ซื่อสัตย์ต่อความรู้สึก</h2>
-            <p style="font-size: 0.9rem; margin-bottom: 20px;">คุณเก่งมากที่ผ่านวันนี้มาได้<br>หากมีอะไรอยากบอกเพิ่มเติม พิมพ์ไว้ที่นี่ได้นะ</p>
+            <h1>บันทึกเสร็จสิ้น</h1>
+            <p style="margin-bottom: 20px;">คุณเก่งมากที่ผ่านวันนี้มาได้<br>หากมีอะไรอยากบอกเพิ่มเติม พิมพ์ไว้ที่นี่ได้นะ</p>
             
             <iframe 
                 src="https://forms.gle/UGRQqBCiE7XwwWSP6" 
                 width="100%" 
-                height="350" 
+                height="320" 
                 frameborder="0" 
                 style="border-radius: 25px; border: 1px solid #f0f0f0;">
                 กำลังโหลด…
@@ -213,9 +222,8 @@
     </div>
 
     <script>
-        // 1. Dust Particles System
         const dustContainer = document.getElementById('dust-container');
-        for (let i = 0; i < 45; i++) {
+        for (let i = 0; i < 40; i++) {
             const dust = document.createElement('div');
             dust.className = 'particle';
             const size = Math.random() * 3 + 2 + 'px';
@@ -228,7 +236,6 @@
             dustContainer.appendChild(dust);
         }
 
-        // 2. Questions Data
         const questions = [
             { q: "ในตอนนี้, คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้, มันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
@@ -262,34 +269,33 @@
             { q: "สำหรับวันนี้, คุณอยากจะขอบคุณตัวเองในเรื่องอะไรมากที่สุด" },
             { q: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน หรือพยายามหนีมัน และเพราะอะไร" },
             { q: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี เราอยากเป็นแบบไหน" },
-            { q: "ถ้าต้องเลือก 'จุดแข็ง' ของตัวเองมาหนึ่งอย่างที่คุณมั่นใจมากที่สุด?" },
-            { q: "ในวันที่ทุกอย่างไม่เป็นใจ อะไรคือสิ่งที่ช่วยดึงความรู้สึกคุณให้กลับมาได้เร็วที่สุด?" },
-            { q: "อะไรคือ 'คำชม' ที่คุณได้รับแล้วรู้สึกใจฟูที่สุด จนจำได้ไม่ลืม?" },
-            { q: "ถ้าชีวิตคือหนังสือหนึ่งเล่ม ตอนนี้คุณคิดว่าตัวเองกำลังอยู่ในบทไหน?" },
+            { q: "ถ้าต้องเลือก 'จุดแข็ง' ของตัวเองมาหนึ่งอย่างที่คุณมั่นใจที่สุด?" },
+            { q: "ในวันที่ทุกอย่างไม่เป็นใจ อะไรคือสิ่งที่ช่วยดึงความรู้สึกคุณให้ดีขึ้น?" },
+            { q: "อะไรคือ 'คำชม' ที่คุณได้รับแล้วรู้สึกใจฟูที่สุด?" },
+            { q: "ถ้าชีวิตคือหนังสือหนึ่งเล่ม ตอนนี้คุณกำลังอยู่ในบทไหน?" },
             { q: "ความสุขเล็กๆ ของคุณในวันนี้คืออะไร?" },
-            { q: "เวลาเจอเพื่อนใหม่ อะไรในตัวคุณที่ทำให้คนอื่นรู้สึกสบายใจ?" },
-            { q: "เมื่อต้องตัดสินใจเรื่องยากๆ คุณใช้ 'เหตุผล' หรือ 'ความรู้สึก' นำทางมากกว่ากัน?" },
+            { q: "เวลาเจอเพื่อนใหม่ อะไรในตัวคุณที่ทำให้คนอื่นสบายใจ?" },
+            { q: "เมื่อต้องตัดสินใจเรื่องยากๆ คุณใช้เหตุผลหรือความรู้สึกนำทาง?" },
             { q: "เวลาที่รู้สึกเหนื่อย คุณบอกตัวเองยังไงให้ยังมีแรงสู้ต่อ?" },
-            { q: "คุณมองว่า 'ความล้มเหลว' เป็นกำแพง หรือเป็นบันไดให้เราเหยียบขึ้นไป?" },
+            { q: "คุณมองว่า 'ความล้มเหลว' เป็นกำแพง หรือเป็นบันได?" },
             { q: "มิตรภาพที่ดีสำหรับคุณต้องมีองค์ประกอบอะไรบ้าง?" },
-            { q: "มีเหตุการณ์ร้ายๆ ไหนไหม ที่สุดท้ายกลับกลายเป็นบทเรียนที่ดีที่สุด?" },
-            { q: "ถ้าไม่สบายใจ คุณเป็นสาย 'ระบายให้ฟัง' หรือ 'ขอนั่งเงียบๆ คนเดียว'?" },
-            { q: "ถ้ามีคนมาปรึกษาปัญหาที่คุณเคยผ่านมาได้ คุณจะให้คำแนะนำเขายังไง?" },
-            { q: "อะไรคือสิ่งที่ทำให้คุณรู้สึกว่าคุ้มค่าที่จะเสี่ยง แม้จะไม่สำเร็จ?" },
-            { q: "คุณจัดการกับความคาดหวังของคนอื่นยังไงให้ตัวเองไม่เครียดจนเกินไป?" },
+            { q: "มีเหตุการณ์ไหนที่ตอนแรกดูร้าย แต่สุดท้ายกลายเป็นบทเรียนที่ดี?" },
+            { q: "ถ้าไม่สบายใจ คุณเป็นสายระบายหรือสายขอนั่งเงียบๆ คนเดียว?" },
+            { q: "ถ้ามีคนมาปรึกษาปัญหาที่คุณเคยผ่านมา คุณจะแนะนำเขายังไง?" },
+            { q: "อะไรคือสิ่งที่ทำให้คุณรู้สึกว่าคุ้มค่าที่จะเสี่ยง?" },
+            { q: "คุณจัดการกับความคาดหวังของคนอื่นยังไงให้ไม่เครียดเกินไป?" },
             { q: "ในตอนนี้ อะไรคือบทเรียนที่สำคัญที่สุดที่ชีวิตสอนคุณ?" },
-            { q: "ถ้าคุณสามารถส่งข้อความไปหาตัวเองในวัย 80 ปีได้ คุณอยากบอกอะไร?" },
-            { q: "และนี่คือข้อสุดท้าย... แรงผลักดันที่สำคัญที่สุดในชีวิตของคุณตอนนี้คืออะไร?" }
+            { q: "ถ้าคุณส่งข้อความหาตัวเองในวัย 80 ปีได้ คุณอยากบอกอะไร?" },
+            { q: "แรงผลักดันที่สำคัญที่สุดในชีวิตของคุณตอนนี้คืออะไร?" }
         ];
 
         let currentIdx = 0;
 
-        // 3. Screen Transition Control
         function changeScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
             if (currentActive) {
                 currentActive.style.opacity = '0';
-                currentActive.style.transform = 'translateY(-20px)';
+                currentActive.style.transform = 'translateY(-15px)';
             }
 
             setTimeout(() => {
@@ -302,7 +308,6 @@
             }, 600);
         }
 
-        // 4. Question Rendering
         function renderQuestion() {
             const q = questions[currentIdx];
             const qText = document.getElementById('question-text');
