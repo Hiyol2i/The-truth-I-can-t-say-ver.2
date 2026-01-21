@@ -33,7 +33,6 @@
             position: relative;
         }
 
-        /* --- Ambient Blobs --- */
         .ambient-bg {
             position: absolute;
             width: 100%;
@@ -58,7 +57,6 @@
             100% { transform: translate(12%, 18%) scale(1.1); }
         }
 
-        /* --- Dust Particles --- */
         .particle-container {
             position: absolute;
             width: 100%;
@@ -145,7 +143,6 @@
 
         textarea:focus { border-color: var(--warm-pink); background: white; }
         
-        /* สไตล์เมื่อเกิด Error */
         textarea.input-error {
             border: 2px solid var(--error-red);
             background: #fffafa;
@@ -216,7 +213,6 @@
     </div>
 
     <script>
-        // 1. Dust Particles
         const dustContainer = document.getElementById('dust-container');
         for (let i = 0; i < 40; i++) {
             const dust = document.createElement('div');
@@ -229,7 +225,6 @@
             dustContainer.appendChild(dust);
         }
 
-        // 2. Questions List (เหมือนเดิม)
         const questions = [
             { q: "ในตอนนี้คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้ \nมันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
@@ -327,21 +322,17 @@
             const input = document.getElementById('answer-input');
             const value = input.value.trim();
 
-            // 1. ตรวจสอบเงื่อนไขการบล็อก (Validation)
-            // ถ้ากดปุ่ม 'ข้อถัดไป' (isSkip = false) และไม่ได้พิมพ์อะไรเลย
             if (!isSkip && value === "") {
                 input.classList.add('input-error');
                 input.placeholder = "โปรดระบายความในใจก่อนไปต่อนะ...";
                 
-                // ล้าง Animation เพื่อให้กดซ้ำแล้วสั่นอีกได้
                 setTimeout(() => {
                     input.classList.remove('input-error');
                 }, 400);
                 
-                return; // จบการทำงานทันที (ไม่เปลี่ยนข้อ)
+                return;
             }
 
-            // 2. ถ้าผ่านเงื่อนไข (กดข้าม หรือ พิมพ์แล้ว) ให้ไปข้อต่อไป
             if (currentIdx < questions.length - 1) {
                 currentIdx++;
                 renderQuestion();
