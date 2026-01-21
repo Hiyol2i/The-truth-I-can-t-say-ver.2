@@ -5,308 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Truth I Can't Say</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --warm-pink: #ffb1c1;
-            --warm-yellow: #ffe08a;
-            --warm-green: #a7d7b5;
-            --bg-creme: #fdf5e6; 
-            --text-main: #4a4453; 
-            --glass-card: rgba(255, 255, 255, 0.7);
+            --warm-pink: #ffb1c1; --warm-yellow: #ffe08a; --warm-green: #a7d7b5;
+            --bg-creme: #fdf5e6; --text-main: #4a4453; --glass-card: rgba(255, 255, 255, 0.7);
             --error-red: #d66d75;
         }
-
         * { box-sizing: border-box; }
-
         body {
-            margin: 0;
-            font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-creme);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            position: relative;
+            margin: 0; font-family: 'Kanit', sans-serif; background-color: var(--bg-creme);
+            color: var(--text-main); display: flex; justify-content: center;
+            align-items: center; height: 100vh; width: 100vw; overflow: hidden; position: relative;
         }
-
-        .ambient-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            filter: blur(60px);
-            opacity: 0.8;
-        }
-
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            animation: floating 25s infinite alternate ease-in-out;
-        }
-
+        .ambient-bg { position: absolute; width: 100%; height: 100%; z-index: -1; filter: blur(60px); opacity: 0.8; }
+        .blob { position: absolute; border-radius: 50%; animation: floating 25s infinite alternate ease-in-out; }
         .pink { background: var(--warm-pink); width: 65vw; height: 65vw; top: -15%; left: -10%; }
         .yellow { background: var(--warm-yellow); width: 75vw; height: 75vw; bottom: -20%; right: -10%; animation-delay: -5s; }
         .green { background: var(--warm-green); width: 55vw; height: 55vw; top: 20%; left: 30%; animation-delay: -10s; }
-
-        @keyframes floating {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(12%, 18%) scale(1.1); }
-        }
-
-        .particle-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: dustFloat linear infinite; 
-        }
-
-        @keyframes dustFloat {
-            0% { transform: translate(0, 0); opacity: 0; }
-            10% { opacity: 0.8; }
-            50% { transform: translate(20px, -45vh); opacity: 0.5;}
-            100% { transform: translate(-10px, -100vh); opacity: 0; }
-        }
-
-        #app {
-            width: 90%;
-            max-width: 500px;
-            z-index: 10;
-        }
-
+        @keyframes floating { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(12%, 18%) scale(1.1); } }
+        #app { width: 90%; max-width: 500px; z-index: 10; }
         .screen {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
+            display: none; opacity: 0; transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-direction: column;
-            align-items: center;
-            background: var(--glass-card);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid white;
-            border-radius: 45px;
-            padding: 40px 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            text-align: center;
+            flex-direction: column; align-items: center; background: var(--glass-card);
+            backdrop-filter: blur(15px); border: 2px solid white; border-radius: 45px;
+            padding: 40px 25px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); text-align: center;
         }
-
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
-
-        h1 { font-size: 1.5rem; font-weight: 400; color: #d66d75; margin-bottom: 1rem; }
-        
-        h2 { 
-            font-size: 1.1rem; 
-            font-weight: 300; 
-            line-height: 1.6; 
-            margin-bottom: 1.5rem; 
-            padding: 0 10px;
-            white-space: pre-line;
-            transition: all 0.6s ease;
-        }
-
-        .question-hide { opacity: 0; transform: translateY(15px); }
-        .question-show { opacity: 1; transform: translateY(0); }
-
-        .progress-wrap {
-            width: 100%; height: 5px; background: rgba(0,0,0,0.05);
-            border-radius: 10px; margin-bottom: 25px; overflow: hidden;
-        }
-
-        #progress {
-            width: 0%; height: 100%;
-            background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999);
-            transition: width 0.8s ease;
-        }
-
+        h1 { font-size: 1.5rem; color: #d66d75; margin-bottom: 1rem; font-weight: 400; }
+        h2 { font-size: 1.1rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; min-height: 3.5em; }
+        .progress-wrap { width: 100%; height: 5px; background: rgba(0,0,0,0.05); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+        #progress { width: 0%; height: 100%; background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999); transition: width 0.8s ease; }
         textarea {
-            width: 100%; height: 130px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid transparent;
-            border-radius: 25px; color: var(--text-main); padding: 18px;
-            font-family: 'Kanit', sans-serif; font-size: 1rem;
-            resize: none; outline: none; text-align: center;
-            margin-bottom: 25px; transition: all 0.3s;
+            width: 100%; height: 130px; background: rgba(255, 255, 255, 0.8); border: 2px solid transparent;
+            border-radius: 25px; padding: 18px; font-family: 'Kanit', sans-serif; font-size: 1rem;
+            resize: none; outline: none; text-align: center; margin-bottom: 20px; transition: 0.3s;
         }
-
-        textarea:focus { border-color: var(--warm-pink); background: white; }
-        
-        textarea.input-error {
-            border: 2px solid var(--error-red);
-            background: #fffafa;
-            animation: shake 0.3s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
+        textarea.input-error { border: 2px solid var(--error-red); animation: shake 0.3s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; align-items: center; }
+        .main-btns { display: flex; gap: 15px; }
         button {
-            background: #4a4453; color: white; border: none;
-            padding: 12px 40px; border-radius: 30px; cursor: pointer;
-            font-size: 0.95rem; font-family: 'Kanit', sans-serif;
-            transition: 0.3s;
+            background: #4a4453; color: white; border: none; padding: 12px 30px;
+            border-radius: 30px; cursor: pointer; font-family: 'Kanit', sans-serif; transition: 0.3s;
         }
-
-        button:hover { transform: scale(1.05); background: #35313d; }
-        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; box-shadow: none; font-size: 0.8rem; }
+        button:disabled { opacity: 0.2; cursor: not-allowed; }
+        .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; }
+        .btn-back { background: rgba(0,0,0,0.1); color: #4a4453; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-
-    <div class="ambient-bg">
-        <div class="blob pink"></div>
-        <div class="blob yellow"></div>
-        <div class="blob green"></div>
-    </div>
-
-    <div class="particle-container" id="dust-container"></div>
-
+    <div class="ambient-bg"><div class="blob pink"></div><div class="blob yellow"></div><div class="blob green"></div></div>
     <div id="app">
         <section id="screen-intro" class="screen active">
             <h1>The Truth I Can't Say</h1>
-            <p>เว็บไซต์นี้ไม่ได้มีไว้เพื่อหาคำตอบที่ถูกต้อง<br>แต่เป็นพื้นที่ให้คุณได้หยุดคิด ทบทวน <br>และฟังเสียงของตัวเอง</p>
+            <p>เว็บไซต์นี้ไม่ได้มีไว้เพื่อหาคำตอบที่ถูกต้อง<br>แต่เป็นพื้นที่ให้คุณได้หยุดคิด ทบทวน และฟังเสียงของตัวเอง</p>
             <button onclick="changeScreen('screen-warning')">เริ่มต้น</button>
         </section>
-
         <section id="screen-warning" class="screen">
             <h1>ข้อแนะนำก่อนเริ่ม</h1>
-            <p style="color: #d66d75;">นี่ไม่ใช่การประเมิน แต่เป็นพื้นที่ปลอดภัย<br>ไม่มีใครตัดสินคุณ อนุญาตให้ตัวเองได้รู้สึกตามจริง <br>ซึ่งจะไม่มีการเก็บข้อมูลใดๆ <br>ไม่ว่าจะเป็นข้อมูลส่วนตัว หรือแม้กระทั่งสิ่งที่คุณพิมพ์ลงไป <br>ข้อใดที่คุณไม่สะดวกตอบ คุณสามารถกดข้ามไปข้อถัดไปได้</p>
+            <p style="color: #d66d75;">นี่ไม่ใช่การประเมิน แต่เป็นพื้นที่ปลอดภัย<br>ไม่มีใครตัดสินคุณ อนุญาตให้ตัวเองได้รู้สึกตามจริง</p>
             <button onclick="changeScreen('screen-quiz')">เข้าใจแล้ว, เริ่มกันเลย</button>
         </section>
-
         <section id="screen-quiz" class="screen">
             <div class="progress-wrap"><div id="progress"></div></div>
-            <h2 id="question-text" class="question-show">...</h2>
+            <h2 id="question-text">...</h2>
             <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
-            <div style="display: flex; gap: 15px;">
-                <button class="btn-skip" onclick="handleNextQuestion(true)">ข้าม</button>
-                <button onclick="handleNextQuestion(false)">ข้อถัดไป</button>
+            <div class="btn-container">
+                <div class="main-btns">
+                    <button class="btn-skip" onclick="handleNavigation('skip')">ข้าม</button>
+                    <button id="btn-next" onclick="handleNavigation('next')">ข้อถัดไป</button>
+                </div>
+                <button id="btn-prev" class="btn-back" onclick="handleNavigation('prev')">ย้อนกลับ</button>
             </div>
         </section>
-
         <section id="screen-end" class="screen">
             <h1>บันทึกเสร็จสิ้น</h1>
-            <p>คุณเก่งมากที่ผ่านวันนี้มาได้</p>
             <iframe src="https://forms.gle/UGRQqBCiE7XwwWSP6" width="100%" height="320" frameborder="0" style="border-radius: 25px;">กำลังโหลด…</iframe>
-            <button onclick="changeScreen('screen-thanks')" style="margin-top: 25px;">จบบันทึก</button>
-        </section>
-
-        <section id="screen-thanks" class="screen">
-            <h2>ขอให้เป็นวันที่ใจดีกับคุณนะ</h2>
-            <button onclick="location.reload()">กลับหน้าแรก</button>
+            <button onclick="location.reload()" style="margin-top: 20px;">กลับหน้าแรก</button>
         </section>
     </div>
 
     <script>
-        const dustContainer = document.getElementById('dust-container');
-        for (let i = 0; i < 40; i++) {
-            const dust = document.createElement('div');
-            dust.className = 'particle';
-            const size = Math.random() * 3 + 2 + 'px';
-            dust.style.width = size; dust.style.height = size;
-            dust.style.left = Math.random() * 100 + 'vw';
-            dust.style.top = Math.random() * 100 + 'vh';
-            dust.style.animationDuration = (Math.random() * 20 + 20) + 's';
-            dustContainer.appendChild(dust);
-        }
-
         const questions = [
             { q: "ในตอนนี้คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
             { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้ \nมันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
-            { q: "มีความรู้สึกบางอย่าง\nที่คุณกำลังพยายามจะหลีกเลี่ยงหรือเปล่า" },
-            { q: "สมมติว่าคุณไม่จำเป็นต้องเก่ง \nไม่ต้องเข้มแข็ง คุณอยากจะเป็นคนแบบไหน" },
+            { q: "มีความรู้สึกบางอย่าง \nที่คุณกำลังพยายามจะหลีกเลี่ยงหรือเปล่า" },
+            { q: "สมมติว่าคุณไม่จำเป็นต้องเก่ง ไม่ต้องเข้มแข็ง \nคุณอยากจะเป็นคนแบบไหน" },
             { q: "ถ้าหากคุณตัดสินใจเพื่อตัวเองอย่างแท้จริง \nผลลัพธ์ในวันนี้อาจแตกต่างไปจากเดิมบ้างไหม" },
             { q: "ถ้าหากไม่มีใครต้องผิดหวัง \nมีอะไรบ้างที่คุณอยากจะเลือกทำ" },
-            { q: "เมื่อคุณอยู่ร่วมกับผู้อื่น \nคุณรู้สึกเป็นตัวของตัวเองมากน้อยแค่ไหน" },
             { q: "มีใครบางคนในชีวิตที่คุณอยากจะบอกความจริง\nกับเขาหรือเธอไหม" },
-            { q: "คุณเคยรู้สึกไหมว่าต้องพยายามเป็นคนเดิม\nเพื่อให้ใครสักคนยังคงอยู่กับคุณ" },
-            { q: "มีความคาดหวังบางอย่างที่คุณแบกรับไว้\nโดยไม่รู้ตัวบ้างไหม" },
+            { q: "คุณเคยรู้สึกไหมว่าต้องพยายามเป็นคนเดิม \nเพื่อให้ใครสักคนยังคงอยู่กับคุณ" },
+            { q: "มีความคาดหวังบางอย่าง \nที่คุณแบกรับไว้โดยไม่รู้ตัวบ้างไหม" },
             { q: "สิ่งที่คุณกำลังพยายามทำอยู่ตอนนี้ \nมันเป็นสิ่งที่คุณต้องการจริงๆ หรือเปล่า" },
-            { q: "ถ้าหากคุณไม่ต้องพิสูจน์อะไรกับใคร\nชีวิตของคุณจะรู้สึกเบาลงบ้างไหม" },
+            { q: "ถ้าหากคุณไม่ต้องพิสูจน์อะไรกับใคร \nชีวิตของคุณจะรู้สึกเบาลงบ้างไหม" },
             { q: "มีอะไรบ้างที่คุณอยากจะปล่อยวาง \nแต่ก็ยังทำไม่ได้ในตอนนี้" },
             { q: "ครั้งสุดท้ายที่คุณใจดี\nและเมตตาต่อตัวเองคือเมื่อไหร่กันนะ" },
+            { q: "คุณอนุญาตให้ตัวเองได้พักผ่อน \nโดยไม่ต้องรู้สึกผิดบ้างไหม" },
             { q: "ถ้าคุณดูแลตัวเองเหมือนที่คุณดูแลคนที่คุณรัก\nมันจะแตกต่างกันบ้างไหม" },
-            { q: "ถ้าไม่สบายใจ คุณเป็นสายระบาย\nหรือสายขอนั่งเงียบๆ คนเดียว?" },
+            { q: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน \nหรือพยายามหนีมัน และเพราะอะไร" },
+            { q: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี \nเราอยากเป็นแบบไหน" },
+            { q: "ถ้าไม่สบายใจ คุณเป็นสายระบาย \nหรือสายขอนั่งเงียบๆ คนเดียว?" },
             { q: "ในตอนนี้ \nอะไรคือบทเรียนที่สำคัญที่สุดที่ชีวิตสอนคุณ?" },
-            { q: "ถ้าคุณส่งข้อความหาตัวเองในวัย 80 ปีได้ \nคุณอยากบอกอะไร?" },
+            { q: "ถ้าคุณส่งข้อความหาตัวเองในวัย 80 ปีได้ \nคุณอยากบอกอะไร?" }
         ];
 
         let currentIdx = 0;
+        let userAnswers = new Array(questions.length).fill("");
 
-        function changeScreen(screenId) {
-            const currentActive = document.querySelector('.screen.active');
-            if (currentActive) {
-                currentActive.style.opacity = '0';
-                currentActive.style.transform = 'translateY(-15px)';
-            }
-
-            setTimeout(() => {
-                if (currentActive) currentActive.classList.remove('active');
-                const next = document.getElementById(screenId);
-                if (next) {
-                    next.classList.add('active');
-                    if (screenId === 'screen-quiz') renderQuestion();
-                }
-            }, 600);
+        function changeScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const next = document.getElementById(id);
+            next.classList.add('active');
+            if (id === 'screen-quiz') renderQuestion();
         }
 
         function renderQuestion() {
             const q = questions[currentIdx];
-            const qText = document.getElementById('question-text');
-            const input = document.getElementById('answer-input');
-            
-            qText.classList.remove('question-show');
-            qText.classList.add('question-hide');
-
-            setTimeout(() => {
-                qText.innerHTML = q.q.replace(/\n/g, '<br>');
-                qText.classList.remove('question-hide');
-                qText.classList.add('question-show');
-            }, 400);
-
-            input.value = "";
-            input.classList.remove('input-error');
-            input.placeholder = "พื้นที่นี้เป็นของคุณ...";
-            
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('answer-input').value = userAnswers[currentIdx];
+            document.getElementById('btn-prev').disabled = (currentIdx === 0);
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
         }
 
-        function handleNextQuestion(isSkip) {
+        function handleNavigation(action) {
             const input = document.getElementById('answer-input');
-            const value = input.value.trim();
+            const val = input.value.trim();
 
-            if (!isSkip && value === "") {
-                input.classList.add('input-error');
-                input.placeholder = "โปรดระบายความในใจก่อนไปต่อนะ...";
-                
-                setTimeout(() => {
-                    input.classList.remove('input-error');
-                }, 400);
-                
-                return;
+            if (action === 'next') {
+                if (val === "") {
+                    input.classList.add('input-error');
+                    setTimeout(() => input.classList.remove('input-error'), 400);
+                    return;
+                }
+                userAnswers[currentIdx] = val;
+                move(1);
+            } else if (action === 'skip') {
+                userAnswers[currentIdx] = val;
+                move(1);
+            } else if (action === 'prev' && currentIdx > 0) {
+                userAnswers[currentIdx] = val;
+                move(-1);
             }
+        }
 
-            if (currentIdx < questions.length - 1) {
-                currentIdx++;
-                renderQuestion();
-            } else {
-                changeScreen('screen-end');
-            }
+        function move(step) {
+            currentIdx += step;
+            if (currentIdx >= questions.length) changeScreen('screen-end');
+            else renderQuestion();
         }
     </script>
 </body>
