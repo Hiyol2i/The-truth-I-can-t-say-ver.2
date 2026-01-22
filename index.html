@@ -24,7 +24,7 @@
         .yellow { background: var(--warm-yellow); width: 75vw; height: 75vw; bottom: -20%; right: -10%; animation-delay: -5s; }
         .green { background: var(--warm-green); width: 55vw; height: 55vw; top: 20%; left: 30%; animation-delay: -10s; }
         @keyframes floating { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(12%, 18%) scale(1.1); } }
-        #app { width: 90%; max-width: 500px; z-index: 10; }
+        #app { width: 95%; max-width: 550px; z-index: 10; }
         .screen {
             display: none; opacity: 0; transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -34,11 +34,12 @@
         }
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
         h1 { font-size: 1.5rem; color: #d66d75; margin-bottom: 1rem; font-weight: 400; }
-        h2 { font-size: 1.1rem; font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; min-height: 3.5em; }
+        h2 { font-size: 1.1rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.5rem; }
+        .en-sub { font-size: 0.9rem; font-weight: 300; color: #6b6477; display: block; margin-top: 8px; font-style: italic; }
         .progress-wrap { width: 100%; height: 5px; background: rgba(0,0,0,0.05); border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
         #progress { width: 0%; height: 100%; background: linear-gradient(90deg, #ff8fa3, #ffd152, #88c999); transition: width 0.8s ease; }
         textarea {
-            width: 100%; height: 130px; background: rgba(255, 255, 255, 0.8); border: 2px solid transparent;
+            width: 100%; height: 120px; background: rgba(255, 255, 255, 0.8); border: 2px solid transparent;
             border-radius: 25px; padding: 18px; font-family: 'Kanit', sans-serif; font-size: 1rem;
             resize: none; outline: none; text-align: center; margin-bottom: 20px; transition: 0.3s;
         }
@@ -53,6 +54,7 @@
         button:disabled { opacity: 0.2; cursor: not-allowed; }
         .btn-skip { background: transparent; color: #8e869c; text-decoration: underline; }
         .btn-back { background: rgba(0,0,0,0.1); color: #4a4453; font-size: 0.85rem; }
+        .desc-text { margin-bottom: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -60,55 +62,65 @@
     <div id="app">
         <section id="screen-intro" class="screen active">
             <h1>The Truth I Can't Say</h1>
-            <p>เว็บไซต์นี้ไม่ได้มีไว้เพื่อหาคำตอบที่ถูกต้อง<br>แต่เป็นพื้นที่ให้คุณได้หยุดคิด ทบทวน และฟังเสียงของตัวเอง</p>
-            <button onclick="changeScreen('screen-warning')">เริ่มต้น</button>
+            <div class="desc-text">
+                <p>เว็บไซต์นี้ไม่ได้มีไว้เพื่อหาคำตอบที่ถูกต้อง<br>แต่เป็นพื้นที่ให้คุณได้หยุดคิด ทบทวน และฟังเสียงของตัวเอง</p>
+                <p class="en-sub">This website is not for finding the right answers,<br>but a space for you to pause, reflect, and listen to your own voice.</p>
+            </div>
+            <button onclick="changeScreen('screen-warning')">เริ่มต้น / Start</button>
         </section>
+        
         <section id="screen-warning" class="screen">
-            <h1>ข้อแนะนำก่อนเริ่ม</h1>
-            <p style="color: #d66d75;">นี่ไม่ใช่การประเมิน แต่เป็นพื้นที่ปลอดภัย<br>ไม่มีใครตัดสินคุณ อนุญาตให้ตัวเองได้รู้สึกตามจริง</p>
-            <button onclick="changeScreen('screen-quiz')">เข้าใจแล้ว, เริ่มกันเลย</button>
+            <h1>ข้อแนะนำก่อนเริ่ม / Instructions</h1>
+            <div class="desc-text">
+                <p style="color: #d66d75;">นี่ไม่ใช่การประเมิน แต่เป็นพื้นที่ปลอดภัย<br>ไม่มีใครตัดสินคุณ อนุญาตให้ตัวเองได้รู้สึกตามจริง</p>
+                <p class="en-sub">This is not an assessment, but a safe space.<br>No one is judging you. Allow yourself to feel what is real.</p>
+            </div>
+            <button onclick="changeScreen('screen-quiz')">เข้าใจแล้ว, เริ่มกันเลย / I understand, let's start</button>
         </section>
+
         <section id="screen-quiz" class="screen">
             <div class="progress-wrap"><div id="progress"></div></div>
-            <h2 id="question-text">...</h2>
-            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ..."></textarea>
+            <h2 id="question-text-th">...</h2>
+            <p id="question-text-en" class="en-sub">...</p>
+            <textarea id="answer-input" placeholder="พื้นที่นี้เป็นของคุณ... / This space is yours..."></textarea>
             <div class="btn-container">
                 <div class="main-btns">
-                    <button class="btn-skip" onclick="handleNavigation('skip')">ข้าม</button>
-                    <button id="btn-next" onclick="handleNavigation('next')">ข้อถัดไป</button>
+                    <button class="btn-skip" onclick="handleNavigation('skip')">ข้าม / Skip</button>
+                    <button id="btn-next" onclick="handleNavigation('next')">ข้อถัดไป / Next</button>
                 </div>
-                <button id="btn-prev" class="btn-back" onclick="handleNavigation('prev')">ย้อนกลับ</button>
+                <button id="btn-prev" class="btn-back" onclick="handleNavigation('prev')">ย้อนกลับ / Back</button>
             </div>
         </section>
+
         <section id="screen-end" class="screen">
-            <h1>บันทึกเสร็จสิ้น</h1>
+            <h1>บันทึกเสร็จสิ้น / Completed</h1>
             <iframe src="https://forms.gle/UGRQqBCiE7XwwWSP6" width="100%" height="320" frameborder="0" style="border-radius: 25px;">กำลังโหลด…</iframe>
-            <button onclick="location.reload()" style="margin-top: 20px;">กลับหน้าแรก</button>
+            <button onclick="location.reload()" style="margin-top: 20px;">กลับหน้าแรก / Back to Home</button>
         </section>
     </div>
 
     <script>
         const questions = [
-            { q: "ในตอนนี้คุณกำลังรู้สึกอะไรมากที่สุดในใจ" },
-            { q: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้ \nมันอยากจะบอกอะไรกับตัวคุณเองบ้าง" },
-            { q: "มีความรู้สึกบางอย่าง \nที่คุณกำลังพยายามจะหลีกเลี่ยงหรือเปล่า" },
-            { q: "สมมติว่าคุณไม่จำเป็นต้องเก่ง ไม่ต้องเข้มแข็ง \nคุณอยากจะเป็นคนแบบไหน" },
-            { q: "ถ้าหากคุณตัดสินใจเพื่อตัวเองอย่างแท้จริง \nผลลัพธ์ในวันนี้อาจแตกต่างไปจากเดิมบ้างไหม" },
-            { q: "ถ้าหากไม่มีใครต้องผิดหวัง \nมีอะไรบ้างที่คุณอยากจะเลือกทำ" },
-            { q: "มีใครบางคนในชีวิตที่คุณอยากจะบอกความจริง\nกับเขาหรือเธอไหม" },
-            { q: "คุณเคยรู้สึกไหมว่าต้องพยายามเป็นคนเดิม \nเพื่อให้ใครสักคนยังคงอยู่กับคุณ" },
-            { q: "มีความคาดหวังบางอย่าง \nที่คุณแบกรับไว้โดยไม่รู้ตัวบ้างไหม" },
-            { q: "สิ่งที่คุณกำลังพยายามทำอยู่ตอนนี้ \nมันเป็นสิ่งที่คุณต้องการจริงๆ หรือเปล่า" },
-            { q: "ถ้าหากคุณไม่ต้องพิสูจน์อะไรกับใคร \nชีวิตของคุณจะรู้สึกเบาลงบ้างไหม" },
-            { q: "มีอะไรบ้างที่คุณอยากจะปล่อยวาง \nแต่ก็ยังทำไม่ได้ในตอนนี้" },
-            { q: "ครั้งสุดท้ายที่คุณใจดี\nและเมตตาต่อตัวเองคือเมื่อไหร่กันนะ" },
-            { q: "คุณอนุญาตให้ตัวเองได้พักผ่อน \nโดยไม่ต้องรู้สึกผิดบ้างไหม" },
-            { q: "ถ้าคุณดูแลตัวเองเหมือนที่คุณดูแลคนที่คุณรัก\nมันจะแตกต่างกันบ้างไหม" },
-            { q: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน \nหรือพยายามหนีมัน และเพราะอะไร" },
-            { q: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี \nเราอยากเป็นแบบไหน" },
-            { q: "ถ้าไม่สบายใจ คุณเป็นสายระบาย \nหรือสายขอนั่งเงียบๆ คนเดียว?" },
-            { q: "ในตอนนี้ \nอะไรคือบทเรียนที่สำคัญที่สุดที่ชีวิตสอนคุณ?" },
-            { q: "ถ้าคุณส่งข้อความหาตัวเองในวัย 80 ปีได้ \nคุณอยากบอกอะไร?" }
+            { th: "ในตอนนี้คุณกำลังรู้สึกอะไรมากที่สุดในใจ", en: "What are you feeling most in your heart right now?" },
+            { th: "ถ้าความรู้สึกที่เป็นอยู่ตอนนี้พูดได้ \nมันอยากจะบอกอะไรกับตัวคุณเองบ้าง", en: "If your current feelings could speak, what would they want to tell you?" },
+            { th: "มีความรู้สึกบางอย่าง \nที่คุณกำลังพยายามจะหลีกเลี่ยงหรือเปล่า", en: "Are there any feelings that you are trying to avoid?" },
+            { th: "สมมติว่าคุณไม่จำเป็นต้องเก่ง ไม่ต้องเข้มแข็ง \nคุณอยากจะเป็นคนแบบไหน", en: "Suppose you didn't have to be capable or strong, what kind of person would you want to be?" },
+            { th: "ถ้าหากคุณตัดสินใจเพื่อตัวเองอย่างแท้จริง \nผลลัพธ์ในวันนี้อาจแตกต่างไปจากเดิมบ้างไหม", en: "If you made decisions truly for yourself, would the results today be any different?" },
+            { th: "ถ้าหากไม่มีใครต้องผิดหวัง \nมีอะไรบ้างที่คุณอยากจะเลือกทำ", en: "If no one had to be disappointed, what are the things you would choose to do?" },
+            { th: "มีใครบางคนในชีวิตที่คุณอยากจะบอกความจริง\nกับเขาหรือเธอไหม", en: "Is there someone in your life you want to tell the truth to?" },
+            { th: "คุณเคยรู้สึกไหมว่าต้องพยายามเป็นคนเดิม \nเพื่อให้ใครสักคนยังคงอยู่กับคุณ", en: "Do you ever feel like you have to keep being the same person just so someone will stay with you?" },
+            { th: "มีความคาดหวังบางอย่าง \nที่คุณแบกรับไว้โดยไม่รู้ตัวบ้างไหม", en: "Are there certain expectations you are carrying without realizing it?" },
+            { th: "สิ่งที่คุณกำลังพยายามทำอยู่ตอนนี้ \nมันเป็นสิ่งที่คุณต้องการจริงๆ หรือเปล่า", en: "Is what you are trying to do right now what you actually want?" },
+            { th: "ถ้าหากคุณไม่ต้องพิสูจน์อะไรกับใคร \nชีวิตของคุณจะรู้สึกเบาลงบ้างไหม", en: "If you didn't have to prove anything to anyone, would your life feel lighter?" },
+            { th: "มีอะไรบ้างที่คุณอยากจะปล่อยวาง \nแต่ก็ยังทำไม่ได้ในตอนนี้", en: "What are the things you want to let go of but still can't right now?" },
+            { th: "ครั้งสุดท้ายที่คุณใจดี\nและเมตตาต่อตัวเองคือเมื่อไหร่กันนะ", en: "When was the last time you were kind and compassionate to yourself?" },
+            { th: "คุณอนุญาตให้ตัวเองได้พักผ่อน \nโดยไม่ต้องรู้สึกผิดบ้างไหม", en: "Do you allow yourself to rest without feeling guilty?" },
+            { th: "ถ้าคุณดูแลตัวเองเหมือนที่คุณดูแลคนที่คุณรัก\nมันจะแตกต่างกันบ้างไหม", en: "If you took care of yourself the way you take care of those you love, would it be different?" },
+            { th: "เวลารู้สึกไม่โอเค เรามักเลือกอยู่กับมัน \nหรือพยายามหนีมัน และเพราะอะไร", en: "When you don't feel okay, do you usually choose to sit with it or try to run away from it, and why?" },
+            { th: "ถ้าวันนี้ไม่ต้องเก่ง ไม่ต้องดี \nเราอยากเป็นแบบไหน", en: "If today you didn't have to be 'good' or 'skilled', what would you want to be like?" },
+            { th: "ถ้าไม่สบายใจ คุณเป็นสายระบาย \nหรือสายขอนั่งเงียบๆ คนเดียว?", en: "When uneasy, are you the type to vent or the type who prefers to sit quietly alone?" },
+            { th: "ในตอนนี้ \nอะไรคือบทเรียนที่สำคัญที่สุดที่ชีวิตสอนคุณ?", en: "At this moment, what is the most important lesson life has taught you?" },
+            { th: "ถ้าคุณส่งข้อความหาตัวเองในวัย 80 ปีได้ \nคุณอยากบอกอะไร?", en: "If you could send a message to your 80-year-old self, what would you say?" }
         ];
 
         let currentIdx = 0;
@@ -123,7 +135,8 @@
 
         function renderQuestion() {
             const q = questions[currentIdx];
-            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('question-text-th').innerText = q.th;
+            document.getElementById('question-text-en').innerText = q.en;
             document.getElementById('answer-input').value = userAnswers[currentIdx];
             document.getElementById('btn-prev').disabled = (currentIdx === 0);
             document.getElementById('progress').style.width = ((currentIdx + 1) / questions.length) * 100 + "%";
